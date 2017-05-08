@@ -1,7 +1,6 @@
 // K7scan0.cpp 
 //
 #include "Scanner.hpp"
-#include "global_var.h"
 void CParser::Load_tokenentry(string str,int index)
 {
 	IP_Token_table[str]=index;
@@ -50,9 +49,12 @@ void CParser::pr_tokentable()
 }
 //------------------------------------------------------------------------
 
-int	CParser::yyparse()
+komponent*	CParser::yyparse_and_init_Netz()
 {
 	int tok;
+	int index = 0;
+	komponent* rt = NULL;
+	komponent* first;
 	/*
 	*	Go parse things!
 	*/
@@ -61,8 +63,15 @@ int	CParser::yyparse()
 		if (tok == INTEGER1)
 			printf("%s %d ", IP_revToken_table[tok].c_str(), yylval.i);
 		else
-			if (tok == ELEMENT_NAME)
+			if (tok == ELEMENT_NAME)   // init datalist
+			{
 				printf("%s %s ", IP_revToken_table[tok].c_str(), yylval.s.c_str());
+				first = new komponent;
+				first->Element = yylval.s.c_str();
+				first->index = index;
+				first->next = rt;
+				rt = first;
+			}
 			else
 				if (tok >= BESCHREIBUNG)
 					printf(" BESCHREIBUNG : %s %s", IP_revToken_table[tok].c_str(), yylval.s.c_str());
@@ -74,15 +83,23 @@ int	CParser::yyparse()
 							printf("TYPE: %s ", IP_revToken_table[tok].c_str());
 						else
 							if (tok == NODE1)
+							{
 								printf("%s : %s", IP_revToken_table[tok].c_str(), yylval.s.c_str());
+								first->NODE_1 = yylval.s.c_str();
+							}
 							else
 								if (tok == NODE2)
+								{
 									printf("%s : %s", IP_revToken_table[tok].c_str(), yylval.s.c_str());
+									first->NODE_2 = yylval.s.c_str();
+								}
 								else
 									printf("%c ",tok);
 		printf("\n");
 	}
-	return 0;
+
+	  // get the latest adresse
+	return rt;
 
 }
 //------------------------------------------------------------------------
