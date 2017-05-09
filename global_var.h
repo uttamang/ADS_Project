@@ -2,7 +2,7 @@
 #define	Ungetc(c)		ungetc(c,IP_Input)
 
 #include "Komponent.h"
-
+#include "system.h"
 /*
 *	Lexical analyzer states.
 */
@@ -15,5 +15,6 @@ const int TOKENSTART = 300;
 const int TYPE = 10;
 const int NODE1 = 7;
 const int NODE2 = 8;
-
-
+/*const string INPUT = "a";
+const string OUTPUT = "b";
+const string GND = "c";*/
