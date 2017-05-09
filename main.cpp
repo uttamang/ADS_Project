@@ -4,12 +4,11 @@
 
 komponent* RLC;
 komponent* last_RLC;
-
-
+system_1* sys_pointer;
 void scanner(void)
 {
 	FILE *inf;
-	char fistr[100] = "in1.txt";
+	char fistr[100] = "in2.txt";
 	// change from gets(fistr)
 	inf = fopen(fistr, "r");
 	if (inf == NULL) {
@@ -18,7 +17,9 @@ void scanner(void)
 	}
 	CParser obj;
 	obj.InitParse(inf, stderr, stdout);
-	//	obj.pr_tokentable();
+		//obj.pr_tokentable();
+	sys_pointer = obj.yyparse_and_get_Knoten();
+	
 	last_RLC = obj.yyparse_and_init_Netz();
 }
 
@@ -58,9 +59,27 @@ int main(int argc, char* argv[])
 	print_kanten_tabelle();
 	zusammenfassung Netz;
 	Netz.parallel();
-
-	printf("Nach Parallel \n \n");
+	printf("\n Nach 1. Parallel \n");
 	print_kanten_tabelle();
+	
+	Netz.seriell();
+	printf("\n Nach Seriell \n");
+	print_kanten_tabelle();
+
+	
+
+	Netz.parallel();
+	printf("\n Nach 2. Parallel\n");
+	print_kanten_tabelle();
+
+	Netz.seriell();
+	printf("\n Nach 2. Seriell\n");
+	print_kanten_tabelle();
+	
+	/*printf("INPUT: %s\n", sys_pointer->INPUT);
+	printf("OUTPUT: %s\n", sys_pointer->OUTPUT);
+	printf("GND: %s\n", sys_pointer->GND);*/
+	char c; cin >> c;
 	return 0;
 }
 

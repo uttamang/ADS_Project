@@ -26,7 +26,8 @@ public:
 	void CParser::yyerror(char *ers);			//error reporter
 	int CParser::IP_MatchToken(string &tok);	//checks the token
 	void CParser::InitParse(FILE *inp, FILE *err, FILE *lst);
-	komponent*	CParser::yyparse_and_init_Netz();						//parser
+	komponent*	CParser::yyparse_and_init_Netz();		
+	system_1* CParser::yyparse_and_get_Knoten();
 	void CParser::pr_tokentable();				//test output for tokens
 	void CParser::IP_init_token_table();		//loads the tokens
 	void CParser::Load_tokenentry(string str, int index);//load one token

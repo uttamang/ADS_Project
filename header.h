@@ -5,3 +5,4 @@ using namespace std;
 #include "Scanner.hpp"
 #include "Komponent.h"
 #include "Nets.h"
+#include "system.h"
