@@ -3,17 +3,17 @@
 #include "header.h"
 
 komponent* RLC;
-komponent* last_RLC;
 system_1* sys_pointer;
-void scanner(void)
+komponent* scanner(void)
 {
 	FILE *inf;
+	komponent* last_RLC;
 	char fistr[100] = "in2.txt";
 	// change from gets(fistr)
 	inf = fopen(fistr, "r");
 	if (inf == NULL) {
 		printf("Cannot open input file %s\n", fistr);
-		return;
+		return NULL;
 	}
 	CParser obj;
 	obj.InitParse(inf, stderr, stdout);
@@ -21,9 +21,10 @@ void scanner(void)
 	sys_pointer = obj.yyparse_and_get_Knoten();
 	
 	last_RLC = obj.yyparse_and_init_Netz();
+	return last_RLC;
 }
 
-void print_kanten_tabelle(void)
+void print_kanten_tabelle(komponent* last_RLC)
 {
 	komponent* rt = last_RLC;
 	printf("NODE1| ");
@@ -55,31 +56,12 @@ void print_kanten_tabelle(void)
 
 int main(int argc, char* argv[])
 {
-	scanner();
-	print_kanten_tabelle();
-	zusammenfassung Netz;
-	Netz.parallel();
-	printf("\n Nach 1. Parallel \n");
-	print_kanten_tabelle();
-	
-	Netz.seriell();
-	printf("\n Nach Seriell \n");
-	print_kanten_tabelle();
-
-	
-
-	Netz.parallel();
-	printf("\n Nach 2. Parallel\n");
-	print_kanten_tabelle();
-
-	Netz.seriell();
-	printf("\n Nach 2. Seriell\n");
-	print_kanten_tabelle();
-	
-	/*printf("INPUT: %s\n", sys_pointer->INPUT);
-	printf("OUTPUT: %s\n", sys_pointer->OUTPUT);
-	printf("GND: %s\n", sys_pointer->GND);*/
-	char c; cin >> c;
+	komponent* last_RLC;
+	last_RLC = scanner();
+	print_kanten_tabelle(last_RLC);
+	vereinfachen Netz;
+	Netz(last_RLC);
+	print_kanten_tabelle(last_RLC);
 	return 0;
 }
 

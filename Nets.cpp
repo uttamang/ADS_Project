@@ -2,11 +2,18 @@
 #include "global_var.h"
 extern komponent* last_RLC;
 extern system_1* sys_pointer;
-int zusammenfassung::parallel()
+
+void vereinfachen::operator()(komponent * last_RLC)
+{
+	while (parallel(last_RLC) || seriell(last_RLC));
+	printf("\n\n 1te Version fertig!!! \n\n");
+}
+bool vereinfachen::parallel(komponent* last_RLC)
 {
 	komponent* root = last_RLC;
 	komponent* second_root = last_RLC;
 	komponent* temp = NULL;
+	bool Node_changed = false; // Ist die Schaltung geändert, wird auf true gesetzt.
 	while (root != NULL)
 	{
 		first_matched = root;
@@ -23,6 +30,7 @@ int zusammenfassung::parallel()
 			if ((first_matched->NODE_1 == Matched->NODE_1 && first_matched->NODE_2 == Matched->NODE_2) || (first_matched->NODE_1 == Matched->NODE_2 && first_matched->NODE_2 == Matched->NODE_1))
 			{
 				first_matched-> Element = "(" + first_matched->Element + "||" + Matched->Element + ")";
+				Node_changed = true;
 				temp->next = Matched->next;
 				delete Matched;
 			}
@@ -31,15 +39,16 @@ int zusammenfassung::parallel()
 		}
 		root = root->next;
 	}
-	return 0;
+	return Node_changed;
 }
-int zusammenfassung::seriell()
+bool vereinfachen::seriell(komponent* last_RLC)
 {
 	int check_flag = 0;
 	komponent* check_root = NULL;
 	komponent* root = last_RLC;
 	komponent* second_root = last_RLC;
 	komponent* temp = NULL;
+	bool Node_changed = false;
 	while (root != NULL)
 	{
 		
@@ -72,6 +81,7 @@ int zusammenfassung::seriell()
 				if (first_matched->NODE_1 == sys_pointer->INPUT || first_matched->NODE_1 == sys_pointer->OUTPUT || first_matched->NODE_1 == sys_pointer->GND) check_flag = 0;
 				if (check_flag == 2)
 				{
+					Node_changed = true;
 					first_matched->Element = "(" + first_matched->Element + "+" + Matched->Element + ")";
 					first_matched->NODE_1 = first_matched->NODE_2;
 					first_matched->NODE_2 = Matched->NODE_2;
@@ -97,6 +107,7 @@ int zusammenfassung::seriell()
 				if (first_matched->NODE_1 == sys_pointer->INPUT || first_matched->NODE_1 == sys_pointer->OUTPUT || first_matched->NODE_1 == sys_pointer->GND) check_flag = 0;
 				if (check_flag == 2)
 				{
+					Node_changed = true;
 					first_matched->Element = "(" + first_matched->Element + "+" + Matched->Element + ")";
 					first_matched->NODE_1 = first_matched->NODE_2;
 					first_matched->NODE_2 = Matched->NODE_1;
@@ -122,6 +133,7 @@ int zusammenfassung::seriell()
 				if (first_matched->NODE_2 == sys_pointer->INPUT || first_matched->NODE_2 == sys_pointer->OUTPUT || first_matched->NODE_2 == sys_pointer->GND) check_flag = 0;
 				if (check_flag == 2)
 				{
+					Node_changed = true;
 					first_matched->Element = "(" + first_matched->Element + "+" + Matched->Element + ")";
 					first_matched->NODE_1 = first_matched->NODE_1;
 					first_matched->NODE_2 = Matched->NODE_2;
@@ -147,6 +159,7 @@ int zusammenfassung::seriell()
 				if (first_matched->NODE_2 == sys_pointer->INPUT || first_matched->NODE_2 == sys_pointer->OUTPUT || first_matched->NODE_2 == sys_pointer->GND) check_flag = 0;
 				if (check_flag == 2)
 				{
+					Node_changed = true;
 					first_matched->Element = "(" + first_matched->Element + "+" + Matched->Element + ")";
 					first_matched->NODE_1 = first_matched->NODE_1;
 					first_matched->NODE_2 = Matched->NODE_1;
@@ -162,5 +175,7 @@ int zusammenfassung::seriell()
 		root = root->next;
 	}
 	
-	return 0;
+	return Node_changed;
 }
+
+
