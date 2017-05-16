@@ -3,8 +3,9 @@
 #define _NETS_
 
 #include "Komponent.h"
+#include "knotenlist.h"
 
-class vereinfachen
+class vereinfachen:public Knotenlist
 {
 public:
 	komponent* first_matched; // zu zusammenfassendes Element 

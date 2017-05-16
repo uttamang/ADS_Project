@@ -62,6 +62,9 @@ int main(int argc, char* argv[])
 	vereinfachen Netz;
 	Netz(last_RLC);
 	print_kanten_tabelle(last_RLC);
+
+	Knotenlist* node1 = Netz.setKnoten(last_RLC);
+	Netz.display_node(node1);
 	return 0;
 }
 
