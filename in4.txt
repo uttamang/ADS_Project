@@ -1,0 +1,9 @@
+NETS:a:IN;b:OUT;c:CMN;d,e:INTERNAL;
+R1:R(a,d);
+R2:R(c,d);
+R3:R(e,d);
+R4:R(e,c);
+R5:R(e,b);
+R6:R(b,c);
+
+

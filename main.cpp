@@ -8,7 +8,7 @@ komponent* scanner(void)
 {
 	FILE *inf;
 	komponent* last_RLC;
-	char fistr[100] = "in2.txt";
+	char fistr[100] = "in4.txt";
 	// change from gets(fistr)
 	inf = fopen(fistr, "r");
 	if (inf == NULL) {
@@ -63,8 +63,11 @@ int main(int argc, char* argv[])
 	Netz(last_RLC);
 	print_kanten_tabelle(last_RLC);
 
-	Knotenlist* node1 = Netz.setKnoten(last_RLC);
-	Netz.display_node(node1);
+	Knotenlist* node11 = Netz.setKnoten(last_RLC);
+	Netz.display_node(node11);
+	Knotenlist* node2 = Netz.KnotenSortieren(node11, sys_pointer);
+	Netz.display_node(node2);
+	char c; cin >> c;
 	return 0;
 }
 
