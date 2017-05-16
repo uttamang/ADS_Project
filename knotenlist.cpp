@@ -62,7 +62,7 @@ Knotenlist * Knotenlist::setKnoten(komponent * last_RLC)
 		pointer = pointer->next;
 	}
 
-	/*turn the last pointer of elementlist to each node*/
+	//turn the last pointer of elementlist to each node
 	Knotenlist* ptr_node = temp;
 	while (ptr_node != NULL)
 	{
@@ -106,7 +106,7 @@ Knotenlist* Knotenlist::KnotenSortieren(Knotenlist* last_node, system_1* sys_poi
 	elementlist* ele1 = NULL;
 	int num_nodes = 0;
 	int jj = 0;
-	printf("\n\nSortierungsverfahren");
+	printf("\nnach dem Sortierungsverfahren");
 	while (node1 != NULL) {
 		num_nodes++;
 		last_node1 = node1;
@@ -129,7 +129,6 @@ Knotenlist* Knotenlist::KnotenSortieren(Knotenlist* last_node, system_1* sys_poi
 	node_output->next = NULL;
 	last_node1->next = node1->next;
 	node1 = node1->next;
-	//delete node1;
 	/*--------------------------------------*/
 
 	while (node1->NODE != sys1->INPUT)
@@ -143,7 +142,6 @@ Knotenlist* Knotenlist::KnotenSortieren(Knotenlist* last_node, system_1* sys_poi
 	node_input->next = NULL;
 	last_node1->next = node1->next;
 	node1 = node1->next;
-	//delete node1;
 	/*--------------------------------------*/
 	while (node1->NODE != sys1->GND)
 	{
@@ -157,9 +155,6 @@ Knotenlist* Knotenlist::KnotenSortieren(Knotenlist* last_node, system_1* sys_poi
 	node_input->next = new_node;
 	last_node1->next = node1->next;
 	node1 = node1->next;
-	//delete node1;
-	printf("Liste nach der Filterung (ohne IN,OUT,GND)\n");
-	return node1;
 	ii = ii - 3;
 	if (ii == 0)
 	{
@@ -167,8 +162,6 @@ Knotenlist* Knotenlist::KnotenSortieren(Knotenlist* last_node, system_1* sys_poi
 		return node_output;
 	}
 	/*--------------------------------------*/
-
-	printf("der Rest der Liste :%d\n", ii);
 	node0 = node_output;
 
 	while (ii>1)
@@ -180,19 +173,14 @@ Knotenlist* Knotenlist::KnotenSortieren(Knotenlist* last_node, system_1* sys_poi
 		// end init
 		while (ele0->ELE_NAME != ele1->ELE_NAME)
 		{
-			printf("test stelle\n");
-			if (ele1 != NULL)
+			ele1 = ele1->next;
+			if (ele1 == NULL)
 			{
-				ele1 = ele1->next;
-				}
-			else
-			{
-				return node1;
 				last_node1 = node1;
 				node1 = node1->next;
 				ele1 = node1->Ele_List;
 				jj++; //erste ele0 nicht gleich
-				
+
 				if (jj == ii)
 				{
 					if (ele0 == NULL)
@@ -215,16 +203,12 @@ Knotenlist* Knotenlist::KnotenSortieren(Knotenlist* last_node, system_1* sys_poi
 		last_node1->next = node1->next;
 		node0 = new_node;
 		ii--;
-		printf("der Rest der Liste :%d\n", ii);
 	}
 	ii--;
-	printf("der Rest der Liste :%d\n", ii);
 	new_node = new Knotenlist;
 	new_node->NODE = last_node1->NODE;
 	new_node->Ele_List = last_node1->Ele_List;
 	new_node->next = node_input;
 	node0->next = new_node;
-	//delete last_node;
-	printf("Sortierung der Knoten \n");
 	return node_output;
 }
