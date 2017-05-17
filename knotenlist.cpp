@@ -202,6 +202,7 @@ Knotenlist* Knotenlist::KnotenSortieren(Knotenlist* last_node, system_1* sys_poi
 		node0->next = new_node;
 		last_node1->next = node1->next;
 		node0 = new_node;
+		node1 = node1->next;
 		ii--;
 	}
 	ii--;
