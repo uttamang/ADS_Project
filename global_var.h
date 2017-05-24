@@ -3,6 +3,7 @@
 
 #include "Komponent.h"
 #include "system.h"
+#include <map>
 /*
 *	Lexical analyzer states.
 */

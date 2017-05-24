@@ -1,6 +1,7 @@
 // K7scan0.cpp 
 //
 #include "Scanner.hpp"
+extern unsigned char k_index;
 
 void CParser::Load_tokenentry(string str, int index)
 {
@@ -63,26 +64,35 @@ system_1*	CParser::yyparse_and_get_Knoten()
 		printf("%d ", tok);
 		if (tok >= BESCHREIBUNG)
 			{
-				if (tok == 501) 
-				{ 
-					printf(" BESCHREIBUNG : %s %s", IP_revToken_table[tok].c_str(), yylval.s.c_str());
-					sys->INPUT = yylval.s.c_str();
-					printf(" ---sys->INPUT: %s", sys->INPUT.c_str());
-				}
-				if (tok == 502) 
+			if (tok == 501)
+			{
+				printf(" BESCHREIBUNG : %s %s", IP_revToken_table[tok].c_str(), yylval.s.c_str());
+				sys->INPUT = yylval.s.c_str();
+				printf(" ---sys->INPUT: %s", sys->INPUT.c_str());
+				k_index++;
+			}
+			else
+				if (tok == 502)
 				{
-					printf(" BESCHREIBUNG : %s %s", IP_revToken_table[tok].c_str(), yylval.s.c_str()); 
+					printf(" BESCHREIBUNG : %s %s", IP_revToken_table[tok].c_str(), yylval.s.c_str());
 					sys->OUTPUT = yylval.s.c_str();
 					printf(" ---sys->OUTPUT: %s", sys->OUTPUT.c_str());
+					k_index++;
 				}
-				if (tok == 503) 
-				{ 
-					printf(" BESCHREIBUNG : %s %s", IP_revToken_table[tok].c_str(), yylval.s.c_str()); 
-					sys->GND = yylval.s.c_str();
-					printf(" ---sys->GND: %s", sys->GND.c_str());
-					printf("\n");
-					return sys;
-				}
+				else
+					if (tok == 503)
+					{
+						printf(" BESCHREIBUNG : %s %s", IP_revToken_table[tok].c_str(), yylval.s.c_str());
+						sys->GND = yylval.s.c_str();
+						printf(" ---sys->GND: %s", sys->GND.c_str());
+						printf("\n");
+						k_index++;
+					}
+					else
+						if (tok == 504)
+						{
+							return sys;
+						}
 				printf("\n");
 			}
 		
@@ -95,7 +105,6 @@ system_1*	CParser::yyparse_and_get_Knoten()
 komponent*	CParser::yyparse_and_init_Netz()
 {
 	int tok;
-	int index = 0;
 	komponent* rt = NULL;
 	komponent* first = NULL;
 	/*
@@ -111,7 +120,6 @@ komponent*	CParser::yyparse_and_init_Netz()
 				printf("%s %s ", IP_revToken_table[tok].c_str(), yylval.s.c_str());
 				first = new komponent;
 				first->Element = yylval.s.c_str();
-				first->index = index;
 				first->next = rt;
 				rt = first;
 			}
@@ -291,10 +299,10 @@ int CParser::yylex()
 			}
 
 		case L_BESCHREIBUNG:
-			if (isalpha(c) || c == ',')
+			if (isalpha(c))
 				break;
 			yytext = yytext.substr(0, yytext.size());
-			if (yytext.find(':', 0) != string::npos)
+			if (yytext.find(':', 0) != string::npos) 
 			{
 				temp_text = yytext.substr(0, yytext.size() - 1);
 				yytext = "";
@@ -324,6 +332,12 @@ int CParser::yylex()
 							s = L_START;
 							break;
 						}
+						else
+							if (yytext.find(',', 0) != string::npos)
+							{
+								k_index++;
+								break;
+							}
 			return (IP_MatchToken(yytext));
 
 		case L_NODE1:

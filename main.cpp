@@ -4,6 +4,21 @@
 
 komponent* RLC;
 system_1* sys_pointer;
+unsigned char k_index = 0;
+
+void print_kanten_tabelle(komponent* last_RLC);
+komponent* scanner(void);
+
+int main(int argc, char* argv[])
+{
+	komponent* last_RLC; 
+	last_RLC = scanner();
+	print_kanten_tabelle(last_RLC);
+	zusammenfassen Netz1;
+	Netz1(last_RLC);
+
+	return 0;
+}
 komponent* scanner(void)
 {
 	FILE *inf;
@@ -17,13 +32,12 @@ komponent* scanner(void)
 	}
 	CParser obj;
 	obj.InitParse(inf, stderr, stdout);
-		//obj.pr_tokentable();
+	//obj.pr_tokentable();
 	sys_pointer = obj.yyparse_and_get_Knoten();
-	
+
 	last_RLC = obj.yyparse_and_init_Netz();
 	return last_RLC;
 }
-
 void print_kanten_tabelle(komponent* last_RLC)
 {
 	komponent* rt = last_RLC;
@@ -54,15 +68,5 @@ void print_kanten_tabelle(komponent* last_RLC)
 	printf("\n");
 }
 
-int main(int argc, char* argv[])
-{
-	komponent* last_RLC; 
-	last_RLC = scanner();
-	print_kanten_tabelle(last_RLC);
-
-	Ad_Mat Adjacenzmatrix;
-
-	return 0;
-}
 
 

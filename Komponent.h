@@ -15,7 +15,6 @@ public:
 	string NODE_2 = "";	// 2.te Zeile in Kantentabelle
 	string Element = ""; // Kanten (Spalte in Kantentabelle)
 	komponent* next = NULL; 
-	int index = 0;
 };
 
 
