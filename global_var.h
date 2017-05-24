@@ -18,3 +18,4 @@ const int NODE2 = 8;
 /*const string INPUT = "a";
 const string OUTPUT = "b";
 const string GND = "c";*/
+
