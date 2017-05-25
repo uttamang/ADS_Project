@@ -1,4 +1,4 @@
-NETS:a:IN;b:OUT;c:CMN;d,e,g,f:INTERNAL;
+NETS:a:IN;g:OUT;c:CMN;d,e,b,f:INTERNAL;
 R1:R(a,d);
 R2:R(c,d);
 R3:R(e,d);
@@ -7,6 +7,6 @@ R5:R(e,b);
 R6:R(b,c);
 R7:R(b,f);
 R8:R(c,f);
-R9:R(g,f);
-C1:R(g,c);
-
+C1:R(g,f);
+C2:R(g,c);
+R9:R(f,e);
