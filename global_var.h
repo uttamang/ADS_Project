@@ -16,4 +16,7 @@ const int TOKENSTART = 300;
 const int TYPE = 10;
 const int NODE1 = 7;
 const int NODE2 = 8;
+/*const string INPUT = "a";
+const string OUTPUT = "b";
+const string GND = "c";*/
 

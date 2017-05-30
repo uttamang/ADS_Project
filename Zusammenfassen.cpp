@@ -1,32 +1,44 @@
 #include "Zusammenfassen.h"
+#include "system.h"
 
 extern unsigned char k_index;
-extern system_1 *sys_pointer;
+extern system_1* sys_pointer;
 void zusammenfassen::Initialize_Adjacenzmatrix(komponent * last_RLC)
 {
 	unsigned char max_anzahl = k_index +1 ;// weil nur Komma gezählt wird.
 	int index = 1;
 	komponent* rt = last_RLC;
 	vector<string> init; // Init the first element of Ad_Mat with empty string
+	init.assign(max_anzahl, "");
+	Adjacenzmatrix.assign(max_anzahl, init);
 	while (rt != NULL)
 	{
 		if (load_node_table(rt->NODE_1, index))
 		{
-			Adjacenzmatrix.push_back(init);
-			Adjacenzmatrix[node_table[rt->NODE_1] - 1].assign(max_anzahl, "");
 			index++;
 		}
 		if (load_node_table(rt->NODE_2, index))
 		{
-			Adjacenzmatrix.push_back(init);
-			Adjacenzmatrix[node_table[rt->NODE_2] - 1].assign( max_anzahl, "");
 			index++;
 		}
-		Adjacenzmatrix[node_table[rt->NODE_1] - 1][node_table[rt->NODE_2] - 1] = rt->Element;
-		Adjacenzmatrix[node_table[rt->NODE_2] - 1][node_table[rt->NODE_1] - 1] = rt->Element;
+		if (Adjacenzmatrix[node_table[rt->NODE_1] - 1][node_table[rt->NODE_2] - 1] != "")
+		{
+			Adjacenzmatrix[node_table[rt->NODE_1] - 1][node_table[rt->NODE_2] - 1] += "||" + rt->Element;
+		}
+		else
+			Adjacenzmatrix[node_table[rt->NODE_1] - 1][node_table[rt->NODE_2] - 1] = rt->Element;
+
+		if (Adjacenzmatrix[node_table[rt->NODE_2] - 1][node_table[rt->NODE_1] - 1] != "")
+		{
+			Adjacenzmatrix[node_table[rt->NODE_2] - 1][node_table[rt->NODE_1] - 1] += "||" + rt->Element;
+		}
+		else
+			Adjacenzmatrix[node_table[rt->NODE_2] - 1][node_table[rt->NODE_1] - 1] = rt->Element;
 		rt = rt->next;
 	}
+	max_read_node = index;
 }
+
 bool zusammenfassen::load_node_table(string node, int index)
 {
 	if (node_table[node] == NULL)
@@ -38,6 +50,90 @@ bool zusammenfassen::load_node_table(string node, int index)
 	else
 		return false;
 }
+
+bool zusammenfassen::dreieck2stern()
+{
+	bool dreieck_vorhanden = false;
+	vector<char> stern_position(3);
+	for (char i = 0; i <= k_index && !dreieck_vorhanden; i++)
+	{
+		stern_position[0] = i;
+		if ( i == node_table[sys_pointer->GND] - 1)
+			continue;
+		for (char ii = 0; ii <= k_index && !dreieck_vorhanden; ii++)
+		{
+			if ( ii == node_table[sys_pointer->GND] - 1)
+				continue;
+			if (Adjacenzmatrix[i][ii] != "")
+			{
+				stern_position[1] = ii;
+				for (char i3 = 0; i3 <= k_index; i3++)
+				{
+					if (i3 == node_table[sys_pointer->GND] - 1)
+						continue;
+					if (Adjacenzmatrix[ii][i3] != "")
+					{
+						if (Adjacenzmatrix[i3][i] != "")
+						{
+							stern_position[2] = i3;
+							dreieck_vorhanden = true;
+							break;
+						}
+					}
+				}
+			}
+		}
+	}
+	if (dreieck_vorhanden)
+	{
+		for (char i = 0; i <= k_index; i++)
+		{
+			Adjacenzmatrix[i].push_back("");
+		}
+		k_index++;
+		vector<string> init;
+		init.assign(k_index + 1, "");
+		Adjacenzmatrix.push_back(init);
+		load_node_table("st", k_index+1);
+		
+		for (int i = 0; i < 3; i++)
+		{
+			Adjacenzmatrix[stern_position[i]][k_index] = Adjacenzmatrix[stern_position[i]][stern_position[1]] + Adjacenzmatrix[stern_position[i]][stern_position[2]] + "/(" + \
+				Adjacenzmatrix[stern_position[0]][stern_position[1]] + "+" + Adjacenzmatrix[stern_position[0]][stern_position[2]] + "+" + Adjacenzmatrix[stern_position[1]][stern_position[2]] + ')';
+			Adjacenzmatrix[k_index][stern_position[i]] = Adjacenzmatrix[stern_position[0]][stern_position[1]] + Adjacenzmatrix[stern_position[0]][stern_position[2]] + "/(" + \
+				Adjacenzmatrix[stern_position[0]][stern_position[1]] + "+" + Adjacenzmatrix[stern_position[0]][stern_position[2]] + "+" + Adjacenzmatrix[stern_position[1]][stern_position[2]] + ')';
+		}
+		for (int i = 0; i < 3; i++) // delete node
+		{
+			Adjacenzmatrix[stern_position[i]][stern_position[0]] = "";
+			Adjacenzmatrix[stern_position[i]][stern_position[1]] = "";
+			Adjacenzmatrix[stern_position[i]][stern_position[2]] = "";
+		}
+	}
+
+	return dreieck_vorhanden;
+}
+
+void zusammenfassen::print_matrix()
+{
+	for (int i = 0; i <= k_index + 1; i++) // print node-name
+		cout << rev_node_table[i] << "              ";
+	cout << endl;
+	for (char i = 0; i <= k_index; i++)
+	{
+		if(i <= max_read_node)
+			cout << rev_node_table[i + 1] << "              ";
+		for (char ii = 0; ii <= k_index; ii++)
+		{
+			if (Adjacenzmatrix[i][ii] == "")
+				cout << "              ";
+			else
+				cout << Adjacenzmatrix[i][ii] << "             ";
+		}
+		cout << endl;
+	}
+}
+ 	
 bool zusammenfassen::seriell()
 {
 	bool rt = false;
@@ -102,10 +198,6 @@ bool zusammenfassen::seriell()
 		}
 	}
 	return rt;
-}
-bool zusammenfassen::dreieck2stern()
-{
-	return false;
 }
 bool zusammenfassen::stern2dreieck()
 {
@@ -202,7 +294,7 @@ void zusammenfassen::insert_s2d(int node,int pina,int pinb, int pinc) {
 void zusammenfassen::operator()(komponent * last_RLC)
 {
 	Initialize_Adjacenzmatrix(last_RLC);
-	while (seriell() || stern2dreieck())
+	while (seriell() || stern2dreieck() || dreieck2stern())
 	{
 		print_Adj();
 	}
@@ -227,3 +319,4 @@ void zusammenfassen::print_Adj()
 		cout << endl;
 	}
 }
+

@@ -16,14 +16,15 @@ int main(int argc, char* argv[])
 	print_kanten_tabelle(last_RLC);
 	zusammenfassen Netz1;
 	Netz1(last_RLC);
-	char c;	cin >> c;
+	Netz1.print_matrix();
+
 	return 0;
 }
 komponent* scanner(void)
 {
 	FILE *inf;
 	komponent* last_RLC;
-	char fistr[100] = "in6.txt";
+	char fistr[100] = "in7.txt";
 	// change from gets(fistr)
 	inf = fopen(fistr, "r");
 	if (inf == NULL) {
