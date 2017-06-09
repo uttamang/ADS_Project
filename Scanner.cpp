@@ -1,5 +1,6 @@
 // K7scan0.cpp 
 //
+#include "stdafx.h"
 #include "Scanner.hpp"
 extern unsigned char k_index;
 
@@ -50,7 +51,7 @@ void CParser::pr_tokentable()
 	}
 }
 //------------------------------------------------------------------------
-system_1*	CParser::yyparse_and_get_Knoten()
+system_1	CParser::yyparse_and_get_Knoten()
 {
 	int tok;
 	int index = 0;
@@ -91,7 +92,7 @@ system_1*	CParser::yyparse_and_get_Knoten()
 					else
 						if (tok == 504)
 						{
-							return sys;
+							return *sys;
 						}
 				printf("\n");
 			}

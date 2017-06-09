@@ -1,9 +1,6 @@
 #define	Getc(s)			getc(s)
 #define	Ungetc(c)		ungetc(c,IP_Input)
 
-#include "Komponent.h"
-#include "system.h"
-#include <map>
 /*
 *	Lexical analyzer states.
 */

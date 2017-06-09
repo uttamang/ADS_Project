@@ -6,4 +6,4 @@ using namespace std;
 #include "Scanner.hpp"
 #include "Komponent.h"
 #include "system.h"
-#include "Zusammenfassen.h"
+#include "Zusammenfassen.hpp"

@@ -1,8 +1,9 @@
-#include "Zusammenfassen.h"
+#include "stdafx.h"
+#include "Zusammenfassen.hpp"
 #include "system.h"
 
 extern unsigned char k_index;
-extern system_1* sys_pointer;
+extern system_1 sys_pointer;
 void zusammenfassen::Initialize_Adjacenzmatrix(komponent * last_RLC)
 {
 	unsigned char max_anzahl = k_index +1 ;// weil nur Komma gezählt wird.
@@ -58,18 +59,18 @@ bool zusammenfassen::dreieck2stern()
 	for (char i = 0; i <= k_index && !dreieck_vorhanden; i++)
 	{
 		stern_position[0] = i;
-		if ( i == node_table[sys_pointer->GND] - 1)
+		if ( i == node_table[sys_pointer.GND] - 1)
 			continue;
 		for (char ii = 0; ii <= k_index && !dreieck_vorhanden; ii++)
 		{
-			if ( ii == node_table[sys_pointer->GND] - 1)
+			if ( ii == node_table[sys_pointer.GND] - 1)
 				continue;
 			if (Adjacenzmatrix[i][ii] != "")
 			{
 				stern_position[1] = ii;
 				for (char i3 = 0; i3 <= k_index; i3++)
 				{
-					if (i3 == node_table[sys_pointer->GND] - 1)
+					if (i3 == node_table[sys_pointer.GND] - 1)
 						continue;
 					if (Adjacenzmatrix[ii][i3] != "")
 					{
@@ -145,19 +146,19 @@ bool zusammenfassen::seriell()
 	for (int lp = 0; lp < Adjacenzmatrix.size(); lp++)
 	{
 		seriell_check = 0;
-		if (rev_node_table[lp + 1] == sys_pointer->INPUT)
+		if (rev_node_table[lp + 1] == sys_pointer.INPUT)
 		{
-			//cout << "Seriell gefunden aber die Knoten " << sys_pointer->INPUT << " war INPUT" << endl;
+			//cout << "Seriell gefunden aber die Knoten " <<sys_pointer.INPUT << " war INPUT" << endl;
 			continue;
 		}
-		else if (rev_node_table[lp + 1] == sys_pointer->OUTPUT)
+		else if (rev_node_table[lp + 1] == sys_pointer.OUTPUT)
 		{
-			//cout << "Seriell gefunden aber die Knoten " << sys_pointer->OUTPUT << " war OUTPUT" << endl;
+			//cout << "Seriell gefunden aber die Knoten " <<sys_pointer.OUTPUT << " war OUTPUT" << endl;
 			continue;
 		}
-		else if (rev_node_table[lp + 1] == sys_pointer->GND)
+		else if (rev_node_table[lp + 1] == sys_pointer.GND)
 		{
-			//cout << "Seriell gefunden aber die Knoten " << sys_pointer->GND << " war GND" << endl;
+			//cout << "Seriell gefunden aber die Knoten " <<sys_pointer.GND << " war GND" << endl;
 			continue;
 		}
 		for (int fp = 0; fp < Adjacenzmatrix[lp].size(); fp++)
@@ -211,19 +212,19 @@ bool zusammenfassen::stern2dreieck()
 	for (int lp = 0; lp < Adjacenzmatrix.size(); lp++)
 	{
 		seriell_check = 0;
-		if (rev_node_table[lp + 1] == sys_pointer->INPUT)
+		if (rev_node_table[lp + 1] ==sys_pointer.INPUT)
 		{
-			//cout << "Stern gefunden aber die Knoten " << sys_pointer->INPUT << " war INPUT" << endl;
+			//cout << "Stern gefunden aber die Knoten " <<sys_pointer.INPUT << " war INPUT" << endl;
 			continue;
 		}
-		else if (rev_node_table[lp + 1] == sys_pointer->OUTPUT)
+		else if (rev_node_table[lp + 1] ==sys_pointer.OUTPUT)
 		{
-			//cout << "Stern gefunden aber die Knoten " << sys_pointer->OUTPUT << " war OUTPUT" << endl;
+			//cout << "Stern gefunden aber die Knoten " <<sys_pointer.OUTPUT << " war OUTPUT" << endl;
 			continue;
 		}
-		else if (rev_node_table[lp + 1] == sys_pointer->GND)
+		else if (rev_node_table[lp + 1] ==sys_pointer.GND)
 		{
-			//cout << "Stern gefunden aber die Knoten " << sys_pointer->GND << " war GND" << endl;
+			//cout << "Stern gefunden aber die Knoten " <<sys_pointer.GND << " war GND" << endl;
 			continue;
 		}
 		for (int fp = 0; fp < Adjacenzmatrix[lp].size(); fp++)
