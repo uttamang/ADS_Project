@@ -17,6 +17,8 @@ public:
 	map<int, string> rev_node_table;
 	int max_read_node = 0;
 	int stern_index = 0;
+	string Nenner;
+	string Zaehler;
 
 	void Initialize_Adjacenzmatrix(komponent* last_RLC);
 	bool seriell();
