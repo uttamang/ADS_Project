@@ -10,9 +10,11 @@
 #include <iostream>
 #include <fstream>
 
+
 komponent* RLC;
 system_1 sys_pointer;
 unsigned char k_index = 0;
+bool mouse_weiter_flag = false;
 
 void print_kanten_tabelle(komponent* last_RLC);
 komponent* scanner(void);
@@ -32,8 +34,8 @@ using namespace std;
 
 COLORREF Colref[]={BLACK,RED,GREEN,BLUE,YELLOW,BROWN};
 int Colind=0;
-void gleichung(string Nenner, string Zaehler, int ww, int hh, int schrift);
-
+void Brueck_Darstellung(string Nenner, string Zaehler, int ww, int hh, int schrift);
+void Bereich_Darstellung();
 void Restart()
 {
 	int b, h, x, y;
@@ -56,6 +58,8 @@ void Restart()
 	clrscr();
 	printf("######################################\n\n");
 }
+void weiter();
+void Zeichnen_Schaltung(Ad_Mat netz, int a0, int a1);
 
 
 void user_main()
@@ -66,23 +70,33 @@ void user_main()
 	zusammenfassen Netz1;
 	Netz1(last_RLC);
 
-	int ww = 900, hh = 400;
+	int ww = 1400, hh = 900;
 	int schrift = 24;
-	string tx = "R1+R4";
-	string tx_n = "R6||R9";
-	int tx_x, tx_y;
+	
 	set_windowpos(0, 0, ww, hh);
 	while (1) {								// Endlosschleife
 		set_drawarea(ww, hh);				// Setzen des Zeichenbereiches
 		clrscr();
-		gleichung(tx, tx_n, ww, hh, schrift);
-		Restart();						// Den "Restart"-Button malen und auf eine Aktivierung warten.
+		//Bereich_Darstellung();
+
+		/*text(750,200,24,BLUE,".");
+		text(755, 200, 24, BLUE,".");
+		text(760, 200, 24, BLUE, ".");
+		text(765, 200, 24, BLUE, ".");
+		text(770, 200, 24, BLUE, ".");
+		text(775, 200, 24, BLUE, ".");
+		text(780, 200, 24, BLUE, ".");
+		text(750, 224, 24, BLUE, "AA");
+		text(774, 224, 24, BLUE, "A");*/
+		Brueck_Darstellung( Netz1.Nenner, Netz1.Zaehler, ww, hh, schrift);
+							// Den "Restart"-Button malen und auf eine Aktivierung warten.
+		weiter();
 		if (StopProcess())break;
 
 	}
 }
 
-void gleichung(string Nenner, string Zaehler, int ww, int hh, int schrift)
+void Brueck_Darstellung(string Nenner, string Zaehler, int ww, int hh, int schrift)
 {
 	int tx_y, tx_x;
 	char* tx = new char[Zaehler.length() + 1];
@@ -90,13 +104,13 @@ void gleichung(string Nenner, string Zaehler, int ww, int hh, int schrift)
 	strcpy(tx, Zaehler.c_str());
 	strcpy(tx_n, Nenner.c_str());
 
-	tx_x = ww / 2 - Nenner.size();
+	tx_x = ww / 2 - Nenner.length()*schrift /2;
 	tx_y = hh / 2 + schrift;
 	text(tx_x, tx_y, schrift, BLUE, tx_n);
 
-	line(tx_x, tx_y, tx_x + schrift * 2, tx_y, RED);
+	line(tx_x, tx_y, tx_x + schrift * Nenner.length()/2, tx_y, RED);
 
-	tx_x = ww / 2 - Zaehler.size();
+	tx_x = ww / 2 - Zaehler.length()*schrift/2;
 	tx_y = hh / 2;
 	text(tx_x, tx_y, schrift, BLUE, tx);
 
@@ -104,7 +118,12 @@ void gleichung(string Nenner, string Zaehler, int ww, int hh, int schrift)
 	delete[] tx_n;
 
 }
-
+void Bereich_Darstellung()
+{
+	rectangle(10,10,500,800,BLUE,-1);
+	rectangle(510, 10, 1310, 400, BLUE, -1);
+	rectangle(510, 410, 1310, 800, BLUE, -1);
+}
 komponent* scanner(void)
 {
 	FILE *inf;
@@ -153,4 +172,39 @@ void print_kanten_tabelle(komponent* last_RLC)
 	}
 	printf("\n");
 }
+void weiter()
+{
+	int b, h, x, y;
 
+	get_drawarea(&b, &h);
+
+	textbox(b - 400, h - 40, b - 300, h - 5, 18, BLUE, GREY, GREY, SINGLE_LINE | VCENTER_ALIGN | CENTER_ALIGN, ("weiter"));
+	updatescr();
+
+	while (
+		!((mouseclick(&x, &y) == 1) &&
+		((x > b - 120) && (x < b - 5)) &&
+			((y > h - 40) && (y < h - 5))
+			)) 
+	{
+		printf(".");
+		mouse_weiter_flag = true;
+		if (StopProcess())break;
+	};
+
+}
+void Zeichnen_Schaltung(Ad_Mat netz, int a0, int a1)
+{
+	int index = 0;
+	float angle = 0;
+	for (int i = 0; i < netz.size(); i++)
+	{
+		for (int ii = 0; ii < netz.size(); ii++)
+		{
+			if (netz[i][ii] != "")
+			{
+				index++;
+			}
+		}
+	}
+}
