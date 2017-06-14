@@ -9,16 +9,24 @@
 using namespace std;
 typedef vector<vector<string> >  Ad_Mat;
 
+class Darstellung
+{
+public:
+	string Nenner;
+	string Zaehler;
+};
+
 class zusammenfassen
 {
 public:
 	Ad_Mat Adjacenzmatrix;
 	map<string, int> node_table;
 	map<int, string> rev_node_table;
+	map<string, Darstellung> legend;
 	int max_read_node = 0;
 	int stern_index = 0;
-	string Nenner;
-	string Zaehler;
+	string H_Nenner;
+	string H_Zaehler;
 
 	void Initialize_Adjacenzmatrix(komponent* last_RLC);
 	bool seriell();

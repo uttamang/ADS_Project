@@ -96,14 +96,24 @@ bool zusammenfassen::dreieck2stern()
 		vector<string> init;
 		init.assign(k_index + 1, "");
 		Adjacenzmatrix.push_back(init);
-		load_node_table("st", k_index+1);// Hier muss noch Index für st rein
+		load_node_table("st"+ to_string(k_index), k_index+1);// Hier muss noch Index für st rein
+		Darstellung B;
+		char i2 = 1, i3 = 2;
 		
 		for (int i = 0; i < 3; i++)
 		{
-			Adjacenzmatrix[stern_position[i]][k_index] = Adjacenzmatrix[stern_position[i]][stern_position[1]] + Adjacenzmatrix[stern_position[i]][stern_position[2]] + "/(" + \
-				Adjacenzmatrix[stern_position[0]][stern_position[1]] + "+" + Adjacenzmatrix[stern_position[0]][stern_position[2]] + "+" + Adjacenzmatrix[stern_position[1]][stern_position[2]] + ')';
-			Adjacenzmatrix[k_index][stern_position[i]] = Adjacenzmatrix[stern_position[0]][stern_position[1]] + Adjacenzmatrix[stern_position[0]][stern_position[2]] + "/(" + \
-				Adjacenzmatrix[stern_position[0]][stern_position[1]] + "+" + Adjacenzmatrix[stern_position[0]][stern_position[2]] + "+" + Adjacenzmatrix[stern_position[1]][stern_position[2]] + ')';
+			B.Zaehler = Adjacenzmatrix[stern_position[i]][stern_position[i2]] + '*' + Adjacenzmatrix[stern_position[i]][stern_position[i3]];
+			B.Nenner = Adjacenzmatrix[stern_position[0]][stern_position[1]] + "+" + Adjacenzmatrix[stern_position[0]][stern_position[2]] + "+" + Adjacenzmatrix[stern_position[1]][stern_position[2]];
+			legend["R{" + rev_node_table[stern_position[i] + 1] + ", " + rev_node_table[k_index + 1] + "}"] = B;
+			Adjacenzmatrix[stern_position[i]][k_index] = "R{" + rev_node_table[stern_position[i] + 1] + ", " + rev_node_table[k_index + 1] + "}";
+
+			Adjacenzmatrix[k_index][stern_position[i]] = "R{" + rev_node_table[stern_position[i] + 1] + ", " + rev_node_table[k_index + 1] + "}";
+			i2++;
+			i3++;
+			if (i2 > 2)
+				i2 = 0;
+			if (i3 > 2)
+				i3 = 0;
 		}
 		for (int i = 0; i < 3; i++) // delete node
 		{
@@ -189,7 +199,7 @@ bool zusammenfassen::seriell()
 			}
 			else
 			{
-				Adjacenzmatrix[pin1][pin2] = "((" + ele1 + '+' + ele2 + ")||" + ele0 +")";
+				Adjacenzmatrix[pin1][pin2] = " ((" + ele1 + '+' + ele2 + ")||" + ele0 +") ";
 			}
 			Adjacenzmatrix[pin2][pin1] = Adjacenzmatrix[pin1][pin2]; // Symmetrie
 			// alte elemente werden geloescht
@@ -296,16 +306,16 @@ void zusammenfassen::insert_s2d(int node,int pina,int pinb, int pinc) {
 void zusammenfassen::operator()(komponent * last_RLC)
 {
 	Initialize_Adjacenzmatrix(last_RLC);
-	while (seriell()  ||dreieck2stern())
+	while (seriell() ||dreieck2stern())
 	{
 		print_Adj();
 	}
 	cout << endl << "Keine Aenderung vorgenemmen => fertig !" << endl;
 	print_Adj();
-	Nenner = Adjacenzmatrix[node_table[sys_pointer.INPUT] - 1][node_table[sys_pointer.OUTPUT] - 1] + " + " + Adjacenzmatrix[node_table[sys_pointer.OUTPUT] - 1][node_table[sys_pointer.GND] - 1];
-	Zaehler = Adjacenzmatrix[node_table[sys_pointer.OUTPUT] - 1][node_table[sys_pointer.GND] - 1];
-	cout << "Zaehler: " << Zaehler << endl;
-	cout << "Nenner: " << Nenner << endl;
+	H_Nenner = Adjacenzmatrix[node_table[sys_pointer.INPUT] - 1][node_table[sys_pointer.OUTPUT] - 1] + " + " + Adjacenzmatrix[node_table[sys_pointer.OUTPUT] - 1][node_table[sys_pointer.GND] - 1];
+	H_Zaehler = Adjacenzmatrix[node_table[sys_pointer.OUTPUT] - 1][node_table[sys_pointer.GND] - 1];
+	cout << "Zaehler: " << H_Zaehler << endl;
+	cout << "Nenner: " << H_Nenner << endl;
 }
 void zusammenfassen::print_Adj()
 {
@@ -323,6 +333,9 @@ void zusammenfassen::print_Adj()
 				cout << "--  ";
 		}
 		cout << endl;
+	}
+	for (auto& x : legend) {
+		cout << x.first << ": " << x.second.Zaehler << ": "<< x.second.Nenner << endl;
 	}
 }
 
