@@ -34,7 +34,7 @@ using namespace std;
 
 COLORREF Colref[]={BLACK,RED,GREEN,BLUE,YELLOW,BROWN};
 int Colind=0;
-void Brueck_Darstellung(string Nenner, string Zaehler, int ww, int hh, int schrift);
+int Brueck_Darstellung(string Nenner, string Zaehler, int ww, int hh, int schrift);
 void Bereich_Darstellung();
 void Restart()
 {
@@ -60,6 +60,8 @@ void Restart()
 }
 void weiter();
 void Zeichnen_Schaltung(Ad_Mat netz, int a0, int a1);
+void legend(zusammenfassen& l, int schrift);
+void text_x(int x, int y, int size, int color, string tx);
 
 
 void user_main()
@@ -72,13 +74,14 @@ void user_main()
 
 	int ww = 1400, hh = 900;
 	int schrift = 24;
+	char* tx = "1234567890";
 	
 	set_windowpos(0, 0, ww, hh);
 	while (1) {								// Endlosschleife
 		set_drawarea(ww, hh);				// Setzen des Zeichenbereiches
 		clrscr();
-		//Bereich_Darstellung();
-
+		Bereich_Darstellung();
+		legend(Netz1, schrift);
 		/*text(750,200,24,BLUE,".");
 		text(755, 200, 24, BLUE,".");
 		text(760, 200, 24, BLUE, ".");
@@ -88,7 +91,7 @@ void user_main()
 		text(780, 200, 24, BLUE, ".");
 		text(750, 224, 24, BLUE, "AA");
 		text(774, 224, 24, BLUE, "A");*/
-		Brueck_Darstellung( Netz1.Nenner, Netz1.Zaehler, ww, hh, schrift);
+		Brueck_Darstellung( Netz1.H_Nenner, Netz1.H_Zaehler, 1000, 800, schrift);
 							// Den "Restart"-Button malen und auf eine Aktivierung warten.
 		weiter();
 		if (StopProcess())break;
@@ -96,19 +99,21 @@ void user_main()
 	}
 }
 
-void Brueck_Darstellung(string Nenner, string Zaehler, int ww, int hh, int schrift)
+int Brueck_Darstellung(string Nenner, string Zaehler, int ww, int hh, int schrift)
 {
 	int tx_y, tx_x;
+	int temp;
 	char* tx = new char[Zaehler.length() + 1];
 	char* tx_n = new char[Nenner.length() + 1];
 	strcpy(tx, Zaehler.c_str());
 	strcpy(tx_n, Nenner.c_str());
 
-	tx_x = ww / 2 - Nenner.length()*schrift /2;
+	tx_x = ww / 2 - Nenner.length()*schrift*0.9 /2;
 	tx_y = hh / 2 + schrift;
 	text(tx_x, tx_y, schrift, BLUE, tx_n);
+	temp = tx_x;
 
-	line(tx_x, tx_y, tx_x + schrift * Nenner.length()/2, tx_y, RED);
+	line(tx_x, tx_y, tx_x + schrift*0.9 * Nenner.length()/2, tx_y, RED);
 
 	tx_x = ww / 2 - Zaehler.length()*schrift/2;
 	tx_y = hh / 2;
@@ -116,6 +121,7 @@ void Brueck_Darstellung(string Nenner, string Zaehler, int ww, int hh, int schri
 
 	delete[] tx;
 	delete[] tx_n;
+	return temp;
 
 }
 void Bereich_Darstellung()
@@ -128,7 +134,11 @@ komponent* scanner(void)
 {
 	FILE *inf;
 	komponent* last_RLC;
-	char fistr[100] = "in7.txt";
+	char fistr[100];
+	cout << "Geben Sie bitte den Namen der Datei: ";
+	cin >> fistr;
+	cout << endl;
+
 	// change from gets(fistr)
 	inf = fopen(fistr, "r");
 	if (inf == NULL) {
@@ -138,9 +148,8 @@ komponent* scanner(void)
 	CParser obj;
 	obj.InitParse(inf, stderr, stdout);
 	//obj.pr_tokentable();
-	sys_pointer = obj.yyparse_and_get_Knoten();
 
-	last_RLC = obj.yyparse_and_init_Netz();
+	last_RLC = obj.yyparse_and_init_Netz(sys_pointer);
 	return last_RLC;
 }
 void print_kanten_tabelle(komponent* last_RLC)
@@ -207,4 +216,22 @@ void Zeichnen_Schaltung(Ad_Mat netz, int a0, int a1)
 			}
 		}
 	}
+}
+void legend(zusammenfassen& l, int schrift)
+{
+	int y;
+	y = 20;
+	int x_x;
+	text_x(15,y,50,BLUE,"LEGENDE");
+	for (auto& x : l.legend) {
+		y += 5*schrift;
+		x_x = Brueck_Darstellung(x.second.Nenner, x.second.Zaehler, 500 + x.first.size()+schrift*0.5, y, schrift);
+		text_x(x_x - x.first.size()*schrift*0.9/2  ,y/2+0.5*schrift,schrift,BLUE,x.first + " = ");
+	}
+}
+void text_x(int x, int y , int size, int color , string tx)
+{
+	char* tx_n = new char[tx.length() + 1];
+	strcpy(tx_n, tx.c_str());
+	text(x,y,size,color,tx_n);
 }

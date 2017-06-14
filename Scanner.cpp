@@ -11,28 +11,23 @@ void CParser::Load_tokenentry(string str, int index)
 }
 void CParser::IP_init_token_table()
 {
-	Load_tokenentry("ELEMENT_NAME", 4);
-	Load_tokenentry("INTEGER1", 5);
-	Load_tokenentry("NODE1", 7);
-	Load_tokenentry("NODE2", 8);
-	Load_tokenentry("ELEMENT", 9);
-	int type = TYPE;
-	Load_tokenentry("R", type++);
-	Load_tokenentry("C", type++);
-	Load_tokenentry("L", type++);
-
-	int i = BESCHREIBUNG;
-	Load_tokenentry("NETS", i++);
-	Load_tokenentry("IN", i++);
-	Load_tokenentry("OUT", i++);
-	Load_tokenentry("CMN", i++);
-	Load_tokenentry("INTERNAL", i++);
+	Load_tokenentry("IDENTIFIER",4);
+	Load_tokenentry("INTEGER1",5);
 
 	int ii = TOKENSTART;
 	Load_tokenentry("(", ii++);
 	Load_tokenentry(")", ii++);
 	Load_tokenentry(":", ii++);
 	Load_tokenentry(";", ii++);
+	Load_tokenentry(",", ii++);
+	Load_tokenentry("NETS", ii++);
+	Load_tokenentry("INTERNAL", ii++);
+	Load_tokenentry("CMN",ii++);
+	Load_tokenentry("OUT",ii++);
+	Load_tokenentry("IN", ii++);
+	Load_tokenentry("R", ii++);
+	Load_tokenentry("C", ii++);
+	Load_tokenentry("L", ii++);
 }
 //------------------------------------------------------------------------
 
@@ -51,15 +46,13 @@ void CParser::pr_tokentable()
 	}
 }
 //------------------------------------------------------------------------
-system_1	CParser::yyparse_and_get_Knoten()
+/*system_1	CParser::yyparse_and_get_Knoten()
 {
 	int tok;
 	int index = 0;
 	system_1* sys = NULL;
 	sys = new system_1;
-	/*
-	*	Go parse things!
-	*/
+	
 	printf("---INPUT analyse\n");
 	while ((tok = yylex()) != 0) {
 		printf("%d ", tok);
@@ -103,9 +96,11 @@ system_1	CParser::yyparse_and_get_Knoten()
 	
 
 }
-komponent*	CParser::yyparse_and_init_Netz()
+*/
+komponent*	CParser::yyparse_and_init_Netz(system_1& netz_id)
 {
 	int tok;
+	char ID_Count = 0;
 	komponent* rt = NULL;
 	komponent* first = NULL;
 	/*
@@ -116,39 +111,44 @@ komponent*	CParser::yyparse_and_init_Netz()
 		if (tok == INTEGER1) 
 			printf("%s %d ", IP_revToken_table[tok].c_str(), yylval.i);
 		else
-			if (tok == ELEMENT_NAME)   // init datalist
+			if (tok == IDENTIFIER && IP_LineNumber == 1)   // init datalist
 			{
 				printf("%s %s ", IP_revToken_table[tok].c_str(), yylval.s.c_str());
-				first = new komponent;
-				first->Element = yylval.s.c_str();
-				first->next = rt;
-				rt = first;
-			}
-			else
-				if (tok >= BESCHREIBUNG)
+
+				/*Die Beschreibung wird hier überprüft.*/
+				if (k_index <= 2)
 				{
-					printf(" BESCHREIBUNG : %s %s", IP_revToken_table[tok].c_str(), yylval.s.c_str());					
+					if (k_index <= 1)
+					{
+						k_index == 0 ? netz_id.INPUT = yylval.s : netz_id.OUTPUT = yylval.s;
+					}
+					else
+						netz_id.GND = yylval.s;
+				}
+				k_index++;
+			}
+			else if(tok == IDENTIFIER && IP_LineNumber != 1 )
+			{
+				printf("%s %s ", IP_revToken_table[tok].c_str(), yylval.s.c_str());
+				if (ID_Count == 0)
+				{
+					first = new komponent;
+					first->Element = yylval.s.c_str();
+					first->next = rt;
+					rt = first;
+					ID_Count++;
+				}
+				else if (ID_Count == 1)
+				{
+					first->NODE_1 = yylval.s.c_str();
+					ID_Count++;
 				}
 				else
-					if (tok >= TOKENSTART)
-						printf("%s ", IP_revToken_table[tok].c_str());
-					else
-						if (tok >= TYPE && tok <= 13)
-							printf("TYPE: %s ", IP_revToken_table[tok].c_str());
-						else
-							if (tok == NODE1)
-							{
-								printf("%s : %s", IP_revToken_table[tok].c_str(), yylval.s.c_str());
-								first->NODE_1 = yylval.s.c_str();
-							}
-							else
-								if (tok == NODE2)
-								{
-									printf("%s : %s", IP_revToken_table[tok].c_str(), yylval.s.c_str());
-									first->NODE_2 = yylval.s.c_str();
-								}
-								else
-									printf("%c ", tok);
+				{
+					first->NODE_2 = yylval.s.c_str();
+					ID_Count = 0;
+				}
+			}
 		printf("\n");
 	}
 
@@ -219,17 +219,12 @@ int CParser::yylex()
 {
 	//Locals
 	int c;
-//	size_t pos;
-	string temp_text;
 	lexstate s;
 	/*
 	*	Keep on sucking up characters until we find something which
 	*	explicitly forces us out of this function.
 	*/
 	for (s = L_START, yytext = ""; 1;) {
-		if (IP_LineNumber == 1)
-			s = L_BESCHREIBUNG;
-
 		c = Getc(IP_Input);
 		yytext = yytext + (char)c;
 		switch (s) {
@@ -239,7 +234,7 @@ int CParser::yylex()
 				s = L_INT;
 			}
 			else if (isalpha(c)) {
-				s = L_ELEMENT_NAME;
+				s = L_IDENT;
 			}
 			else if (isspace(c)) {
 				if (c == '\n') {
@@ -250,10 +245,6 @@ int CParser::yylex()
 			else if (c == EOF) {
 				return ('\0');
 			}
-			else if (c == '(')
-				s = L_NODE1;
-			else if (c == ',')
-				s = L_NODE2;
 			else {
 				return (c);
 			}
@@ -279,83 +270,18 @@ int CParser::yylex()
 			*	it with a specific token value.
 			*/
 
-		case L_ELEMENT_NAME:
+		case L_IDENT:
 			if (isalpha(c) || isdigit(c) || c == '_')
 				break;
 			Ungetc(c);
 			yytext = yytext.substr(0, yytext.size() - 1);
-			if (yytext == "NETS")
-			{
-				s = L_BESCHREIBUNG;
-				yytext = "";
-				break;
-			}
-
 			yylval.s = yytext;
 			if (c = IP_MatchToken(yytext)) {
 				return (c);
 			}
 			else {
-				return (ELEMENT_NAME);
+				return (IDENTIFIER);
 			}
-
-		case L_BESCHREIBUNG:
-			if (isalpha(c))
-				break;
-			yytext = yytext.substr(0, yytext.size());
-			if (yytext.find(':', 0) != string::npos) 
-			{
-				temp_text = yytext.substr(0, yytext.size() - 1);
-				yytext = "";
-				break;
-			}
-			else
-				if (yytext.find(';', 0) != string::npos)
-				{
-					yylval.s = temp_text;
-					yytext = yytext.substr(0, yytext.size() - 1);
-				}
-				else
-
-					if (yytext == "NETS")
-					{
-						s = L_BESCHREIBUNG;
-						yytext = "";
-						break;
-					}
-					else
-						if (isspace(c))
-						{
-							if (c == '\n') {
-								IP_LineNumber += 1;
-							}
-							yytext = "";
-							s = L_START;
-							break;
-						}
-						else
-							if (yytext.find(',', 0) != string::npos)
-							{
-								k_index++;
-								break;
-							}
-			return (IP_MatchToken(yytext));
-
-		case L_NODE1:
-			if (isalpha(c))
-				break;
-			Ungetc(c);
-			yytext = yytext.substr(1, yytext.size() - 2);
-			yylval.s = yytext;
-			return (NODE1);
-
-		case L_NODE2:
-			if (isalpha(c))
-				break;
-			Ungetc(c);
-			yytext = yytext.substr(1, yytext.size() - 2);
-			yylval.s = yytext;
-			return (NODE2);
 
 		default: printf("***Fatal Error*** Wrong case label in yylex\n");
 		}

@@ -276,29 +276,21 @@ bool zusammenfassen::stern2dreieck()
 	return rt;
 }
 void zusammenfassen::insert_s2d(int node,int pina,int pinb, int pinc) {
-	/*if (Adjacenzmatrix[pina][pinb] == "")
-	{
-		Adjacenzmatrix[pina][pinb] = 
-			"(" + Adjacenzmatrix[node][pina] + "*" + Adjacenzmatrix[node][pinb] + "+"
+	Darstellung B;
+
+	B.Zaehler = Adjacenzmatrix[node][pina] + "*" + Adjacenzmatrix[node][pinb] + "+"
 			+ Adjacenzmatrix[node][pinb] + "*" + Adjacenzmatrix[node][pinc] + "+"
-			+ Adjacenzmatrix[node][pinc] + "*" + Adjacenzmatrix[node][pina] + "+"
-			+ ")/" + Adjacenzmatrix[node][pinc];
-	}
-	else
-	{
-		Adjacenzmatrix[pina][pinb] = 
-			"((" + Adjacenzmatrix[node][pina] + "*" + Adjacenzmatrix[node][pinb] + " + "
-			+ Adjacenzmatrix[node][pinb] + "*" + Adjacenzmatrix[node][pinc] + "+"
-			+ Adjacenzmatrix[node][pinc] + "*" + Adjacenzmatrix[node][pina] + "+"
-			+ ")/" + Adjacenzmatrix[node][pinc] +")||" + Adjacenzmatrix[pina][pinb]; ;
-	}*/
+			+ Adjacenzmatrix[node][pinc] + "*" + Adjacenzmatrix[node][pina];
+	B.Nenner = Adjacenzmatrix[node][pinc];
+	legend["R{" + rev_node_table[pina + 1] + ',' + rev_node_table[pinb + 1] + '}'] = B;
+	
 	if (Adjacenzmatrix[pina][pinb] == "")
 	{
-		Adjacenzmatrix[pina][pinb] = "R" + rev_node_table[pina+1] + rev_node_table[node+1] + rev_node_table[pinb+1];
+		Adjacenzmatrix[pina][pinb] = "R{" + rev_node_table[pina+1] + ',' + rev_node_table[pinb+1]+ '}';
 	}
 	else
 	{
-		Adjacenzmatrix[pina][pinb] = "R" + rev_node_table[pina + 1] + rev_node_table[node + 1] + rev_node_table[pinb + 1] +"||" + Adjacenzmatrix[pina][pinb]; ;
+		Adjacenzmatrix[pina][pinb] = "R{" + rev_node_table[pina + 1] + ',' + rev_node_table[pinb + 1]+ '}' +"||" + Adjacenzmatrix[pina][pinb]; ;
 	}
 	Adjacenzmatrix[pinb][pina] = Adjacenzmatrix[pina][pinb]; // Symmetrie
 	
@@ -306,7 +298,7 @@ void zusammenfassen::insert_s2d(int node,int pina,int pinb, int pinc) {
 void zusammenfassen::operator()(komponent * last_RLC)
 {
 	Initialize_Adjacenzmatrix(last_RLC);
-	while (seriell() ||dreieck2stern())
+	while (seriell()||stern2dreieck() ||dreieck2stern())
 	{
 		print_Adj();
 	}
