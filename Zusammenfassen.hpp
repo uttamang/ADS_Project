@@ -9,6 +9,10 @@
 using namespace std;
 typedef vector<vector<string> >  Ad_Mat;
 
+/**************************************************************************************************
+*	Klasse Darstellung: Hilfklasse zur Darstellung des Legends in GDE
+***************************************************************************************************/
+
 class Darstellung
 {
 public:
@@ -16,17 +20,20 @@ public:
 	string Zaehler;
 };
 
+/****************************************************************************************************
+* Klasse zusammenfassen: Zur Zusammenfassung und Vereinfachung der Schaltung
+****************************************************************************************************/
 class zusammenfassen
 {
 public:
 	Ad_Mat Adjacenzmatrix;
-	map<string, int> node_table;
-	map<int, string> rev_node_table;
-	map<string, Darstellung> legend;
-	int max_read_node = 0;
-	int stern_index = 0;
-	string H_Nenner;
-	string H_Zaehler;
+	map<string, int> node_table; // Knotentabelle
+	map<int, string> rev_node_table; // umgekehrte Zuordnung von int und string der Knotentabelle
+	map<string, Darstellung> legend; // Legendetabelle
+	int max_read_node = 0;// maximale eingelesene Knoten
+	int stern_index = 0; // Anzahl der Dreieck-Stern Transformation
+	string H_Nenner; // Hauptnenner
+	string H_Zaehler;// Hauptzähler
 
 	void Initialize_Adjacenzmatrix(komponent* last_RLC);
 	bool seriell();
@@ -38,10 +45,3 @@ public:
 	void insert_s2d(int node, int pina, int pinb, int pinc);
 	void print_Adj();
 };
-template <typename T>
-string NumberToString(T number)
-{
-	ostringstream ss;
-	ss << number;
-	return ss.c_str();
-}

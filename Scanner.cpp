@@ -46,56 +46,30 @@ void CParser::pr_tokentable()
 	}
 }
 //------------------------------------------------------------------------
-/*system_1	CParser::yyparse_and_get_Knoten()
-{
-	int tok;
-	int index = 0;
-	system_1* sys = NULL;
-	sys = new system_1;
-	
-	printf("---INPUT analyse\n");
-	while ((tok = yylex()) != 0) {
-		printf("%d ", tok);
-		if (tok >= BESCHREIBUNG)
-			{
-			if (tok == 501)
-			{
-				printf(" BESCHREIBUNG : %s %s", IP_revToken_table[tok].c_str(), yylval.s.c_str());
-				sys->INPUT = yylval.s.c_str();
-				printf(" ---sys->INPUT: %s", sys->INPUT.c_str());
-				k_index++;
-			}
-			else
-				if (tok == 502)
-				{
-					printf(" BESCHREIBUNG : %s %s", IP_revToken_table[tok].c_str(), yylval.s.c_str());
-					sys->OUTPUT = yylval.s.c_str();
-					printf(" ---sys->OUTPUT: %s", sys->OUTPUT.c_str());
-					k_index++;
-				}
-				else
-					if (tok == 503)
-					{
-						printf(" BESCHREIBUNG : %s %s", IP_revToken_table[tok].c_str(), yylval.s.c_str());
-						sys->GND = yylval.s.c_str();
-						printf(" ---sys->GND: %s", sys->GND.c_str());
-						printf("\n");
-						k_index++;
-					}
-					else
-						if (tok == 504)
-						{
-							return *sys;
-						}
-				printf("\n");
-			}
-		
-	}
-	printf("\n");
-	// get the latest adresse
-	
-
-}
+/*********************************************************************************************************
+* Funktion: Die Funktion führt die lexikalische Analyse durch und charakterisiert das Ergebnis nach der 
+*			Analyse. Laut dem Input der Form "(Elementname):(Elementtype)(Knoten1,Knoten2)" ist der Zähler
+*			des Index
+*			0 : Elementname
+*			1 : Knoten1
+*			2 : Knoten2
+*			Die Elementtypen werden in Token-Tabelle eingetragen, sodass sie nicht mehr IDENTIFIER sind.
+*			Die obigen Informationen sind in der Komponentlist der Klasse "komponent" gespeichert. Am Ende
+*			der Funktion wird der Zeiger auf das letzte Element zurückgegeben.
+*		
+*			Am Anfang der Input-Datei sind die Information der INPUT, OUTPUT, GND Knoten. Diese werden in 
+*			"netz_id" gespeichert. Sie sind in der Datei so beschrieben "NETS:a:IN;b:OUT;c:CMN;d,e:INTERNAL;"
+*			Aus diesem Grund wird am Anfang des Funktionsstart diese Information entnommen. Die zugehörigen 
+*			Zähler-Index sind
+*			0: Input-Knote
+*			1: Output-Knote
+*			2: GND-Knote
+*
+*	Argument: 
+*			system_1& netz_id: Variable zum Speichern der Input-, Output-, GND-Knoten.
+*
+*	Rückgabewert:
+*			komponent* : Zeiger auf das letzte Element der Komponentlist.
 */
 komponent*	CParser::yyparse_and_init_Netz(system_1& netz_id)
 {

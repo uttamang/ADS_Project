@@ -5,23 +5,23 @@
 extern unsigned char k_index; // Anzahl der gesamten Knoten
 extern system_1 sys_pointer; // Globale Variable, die Input-, Output-, GND-Knoten enthalten
 
-							 /***********************************************************************************************
-							 * Funktion: Die Funktion initialisiert die Adjacenzmatrix mit Hilfe der Information in der Liste
-							 *			"last_RLC".
-							 *			Zunï¿½chst wird die nxn Adjacenzmatrix mit "" initialisiert. n ist die Anzahl der gesamten
-							 *			Knoten. Die Liste "last_RLC" wird von hinten an untersucht.
-							 *			Es wird ï¿½berprï¿½ft, ob zwischen zwei Knoten schon Elemente vorhanden sind. Wenn es der
-							 *			Fall ist, werden die beiden Elemente mit der Operation "||" verknï¿½pft.
-							 * Argumente:
-							 *
-							 * komponent* last_RLC: Zeiger auf das letzte Element der Komponentlist.
-							 *
-							 * Rï¿½ckgabewert: -
-							 ***********************************************************************************************/
+/***********************************************************************************************
+* Funktion: Die Funktion initialisiert die Adjacenzmatrix mit Hilfe der Information in der Liste
+*			"last_RLC". 
+*			Zunächst wird die nxn Adjacenzmatrix mit "" initialisiert. n ist die Anzahl der gesamten
+*			Knoten. Die Liste "last_RLC" wird von hinten an untersucht.
+*			Es wird überprüft, ob zwischen zwei Knoten schon Elemente vorhanden sind. Wenn es der
+*			Fall ist, werden die beiden Elemente mit der Operation "||" verknüpft.
+* Argumente:
+*
+* komponent* last_RLC: Zeiger auf das letzte Element der Komponentlist.
+*
+* Rückgabewert: -
+***********************************************************************************************/
 
 void zusammenfassen::Initialize_Adjacenzmatrix(komponent * last_RLC)
 {
-	unsigned char max_anzahl = k_index + 1;// weil nur Komma gezï¿½hlt wird.
+	unsigned char max_anzahl = k_index +1 ;// weil nur Komma gezählt wird.
 	int index = 1;
 	komponent* rt = last_RLC;
 	vector<string> init; // Init the first element of Ad_Mat with empty string
@@ -37,7 +37,7 @@ void zusammenfassen::Initialize_Adjacenzmatrix(komponent * last_RLC)
 		{
 			index++;
 		}
-		if (Adjacenzmatrix[node_table[rt->NODE_1] - 1][node_table[rt->NODE_2] - 1] != "")// ï¿½berprï¿½ft, ob zwischen den beiden Knoten schon Elementname eingetragen wurde.
+		if (Adjacenzmatrix[node_table[rt->NODE_1] - 1][node_table[rt->NODE_2] - 1] != "")// Überprüft, ob zwischen den beiden Knoten schon Elementname eingetragen wurde.
 		{
 			Adjacenzmatrix[node_table[rt->NODE_1] - 1][node_table[rt->NODE_2] - 1] += "||" + rt->Element;
 		}
@@ -56,14 +56,14 @@ void zusammenfassen::Initialize_Adjacenzmatrix(komponent * last_RLC)
 }
 
 /**************************************************************************************************
-* Funktion: Die Funktion trï¿½gt einen Knotennamen in die Nodetabelle ein. Gleichzeitig wird ihm das
-*			Index zugeordnet. Wenn eingetragen werden kann, wird true zurï¿½ckgegeben.
+* Funktion: Die Funktion trägt einen Knotennamen in die Nodetabelle ein. Gleichzeitig wird ihm das 
+*			Index zugeordnet. Wenn eingetragen werden kann, wird true zurückgegeben.
 *
-* Argumente:
+* Argumente: 
 * string node : Knotename
-* int index   : Zugehï¿½riges Index
+* int index   : Zugehöriges Index
 *
-* Rï¿½ckgabewert: true , wenn der Name eingetragen werden kann.
+* Rückgabewert: true , wenn der Name eingetragen werden kann.
 */
 bool zusammenfassen::load_node_table(string node, int index)
 {
@@ -78,18 +78,18 @@ bool zusammenfassen::load_node_table(string node, int index)
 }
 
 /*********************************************************************************************************************************
-* Funktion: Es wird Dreieck-Stern Transformation durchgefï¿½hrt. Die Funktion prï¿½ft, ob es zwischen drei
-*			Knoten eine Schleife existiert. Zunï¿½chst wird zwischen zwei Knoten untersucht, wenn ein Element
+* Funktion: Es wird Dreieck-Stern Transformation durchgeführt. Die Funktion prüft, ob es zwischen drei 
+*			Knoten eine Schleife existiert. Zunächst wird zwischen zwei Knoten untersucht, wenn ein Element
 *			dort eingetragen wird, wird die erste Position(1) gemerkt und von dem zweiten Knoten(2) wird weiter gesucht, ob
 *			dieses Knote Verbindung mit anderem Knote(3) hat. Falls zwischen Knoten (2) und (3) ein Element eingetragen wurde,
-*			wird dann zwischen Knoten (3) und (1) den Eintrag ermittelt. Wenn Eintrag vorhanden ist, wird Flag "Dreieck_Vorhanden"
+*			wird dann zwischen Knoten (3) und (1) den Eintrag ermittelt. Wenn Eintrag vorhanden ist, wird Flag "Dreieck_Vorhanden" 
 *			true gesetzt.
-*				Wenn ein Flag "dreieck_vorhanden" true gesetzt wird, wird ein weiteres Knote hinzugefï¿½gt und als "st(i)" genannt.
-*			Zur besseren ï¿½bersicht wird ein Legend erstellt. Die "Darstellung"-Objekt speichert den Nenner und Zï¿½hler.
-*			Spï¿½ter wird ihm eine Abkï¿½rzung der Form "R{i,j}" zugeordnet. Zuletzt wird dann die ehemalige Elemente
-*			zwischen drei Knoten gelï¿½scht.
+*				Wenn ein Flag "dreieck_vorhanden" true gesetzt wird, wird ein weiteres Knote hinzugefügt und als "st(i)" genannt.
+*			Zur besseren Übersicht wird ein Legend erstellt. Die "Darstellung"-Objekt speichert den Nenner und Zähler. 
+*			Später wird ihm eine Abkürzung der Form "R{i,j}" zugeordnet. Zuletzt wird dann die ehemalige Elemente
+*			zwischen drei Knoten gelöscht.
 * kein Argument
-* Rï¿½ckgabewert: true, wenn Dreieck-Stern Transformation mï¿½glich ist.
+* Rückgabewert: true, wenn Dreieck-Stern Transformation möglich ist.
 ********************************************************************************************************************************/
 bool zusammenfassen::dreieck2stern()
 {
@@ -98,18 +98,18 @@ bool zusammenfassen::dreieck2stern()
 	for (char i = 0; i <= k_index && !dreieck_vorhanden; i++)
 	{
 		stern_position[0] = i;
-		if (i == node_table[sys_pointer.GND] - 1) // wird ï¿½berspringt, falls das Knote ein GND ist.
+		if ( i == node_table[sys_pointer.GND] - 1) // wird überspringt, falls das Knote ein GND ist.
 			continue;
 		for (char ii = 0; ii <= k_index && !dreieck_vorhanden; ii++)
 		{
-			if (ii == node_table[sys_pointer.GND] - 1)// wird ï¿½berspringt, falls das Knote ein GND ist.
+			if ( ii == node_table[sys_pointer.GND] - 1)// wird überspringt, falls das Knote ein GND ist.
 				continue;
 			if (Adjacenzmatrix[i][ii] != "") // Zwischen (1)(2) Eintrag vorhanden?
 			{
 				stern_position[1] = ii;
 				for (char i3 = 0; i3 <= k_index; i3++)
 				{
-					if (i3 == node_table[sys_pointer.GND] - 1)// wird ï¿½berspringt, falls das Knote ein GND ist.
+					if (i3 == node_table[sys_pointer.GND] - 1)// wird überspringt, falls das Knote ein GND ist.
 						continue;
 					if (Adjacenzmatrix[ii][i3] != "")// Zwischen (2)(3) Eintrag vorhanden?
 					{
@@ -126,22 +126,22 @@ bool zusammenfassen::dreieck2stern()
 	}
 	if (dreieck_vorhanden)
 	{
-		for (char i = 0; i <= k_index; i++)// Adjacenzmatrix (x-dimension) um 1 vergrï¿½ï¿½ert.
+		for (char i = 0; i <= k_index; i++)// Adjacenzmatrix (x-dimension) um 1 vergrößert.
 		{
 			Adjacenzmatrix[i].push_back("");
 		}
 		k_index++;
 		//------------------------------------------------------//
-		// Wegen Symmetrie, wird Adjacenzmatrix (y-dimension) um 1 vergrï¿½ï¿½ert.
+		// Wegen Symmetrie, wird Adjacenzmatrix (y-dimension) um 1 vergrößert.
 		vector<string> init;
-		init.assign(k_index + 1, "");
+		init.assign(k_index + 1, ""); 
 		Adjacenzmatrix.push_back(init);
-		load_node_table("st" + to_string(k_index), k_index + 1);// Hier muss noch Index fï¿½r st rein
+		load_node_table("st"+ to_string(k_index), k_index+1);// Hier muss noch Index für st rein
 
-																//-----------------------------------------------------//
+		//-----------------------------------------------------//
 		Darstellung B;
 		char i2 = 1, i3 = 2;
-
+		
 		for (int i = 0; i < 3; i++)
 		{
 			B.Zaehler = Adjacenzmatrix[stern_position[i]][stern_position[i2]] + '*' + Adjacenzmatrix[stern_position[i]][stern_position[i3]];
@@ -179,7 +179,7 @@ void zusammenfassen::print_matrix()
 	cout << endl;
 	for (char i = 0; i <= k_index; i++)
 	{
-		if (i <= max_read_node)
+		if(i <= max_read_node)
 			cout << rev_node_table[i + 1] << "              ";
 		for (char ii = 0; ii <= k_index; ii++)
 		{
@@ -197,7 +197,7 @@ void zusammenfassen::print_matrix()
 *				
 * kein Argument
 * Rueckgabewert: true, wenn  serielle Zusammenfassung durchgefuehrt ist.
-********************************************************************************************************************************/
+********************************************************************************************************************************/ 	
 bool zusammenfassen::seriell()
 {
 	bool seriell_vorhanden = false;
@@ -206,7 +206,7 @@ bool zusammenfassen::seriell()
 	string ele2;
 	int Knoten_mitte, Knoten1, Knoten2, element_counter; 
 	
-	for (int lp = 0; lp < Adjacenzmatrix.size(); lp++) // durchlauf fÃ¼r jede Knoten in Adjacenzmatrix
+	for (int lp = 0; lp < Adjacenzmatrix.size(); lp++) // durchlauf für jede Knoten in Adjacenzmatrix
 	{
 		element_counter = 0;
 		// Prueft, ob die aktuelle Knoten GND,INPUT oder OUTPUT ist. 
@@ -273,7 +273,6 @@ bool zusammenfassen::seriell()
 	}
 	return seriell_vorhanden;
 }
-
 /*********************************************************************************************************************************
 * Funktion: Es wird Stern-Dreieck Transformation durchgefuehrt. Die Funktion prueft, ob es an einer Knoten
 *			eine Sternschaltung existiert (genau 3 Elementen vorhanden). Zu naechst wird die mittlere Knoten
@@ -353,8 +352,6 @@ bool zusammenfassen::stern2dreieck()
 	}
 	return stern_vorhanden;
 }
-
-
 /*********************************************************************************************************************************
 * Funktion: Es wird ein neue Element in Adlacenzmatrix eingefuegt.
 *		Die "Darstellung"-Objekt speichert den Nenner und Zaehler.
@@ -395,30 +392,35 @@ void zusammenfassen::insert_s2d(int mid_node, int pina, int pinb, int pinc) {
 	Adjacenzmatrix[pinb][pina] = Adjacenzmatrix[pina][pinb]; // Symmetrie
 
 }
+/********************************************************************************************************************************
+*Funktion: Dieser Operator ruft die Funktionen "seriell->stern2dreieck->dreieck2stern" der Reihefolge nach auf. Wenn Änderungen in
+*		   der Schaltung vorgenommen werden, fängt die Zusammenfassungsoperation wieder von vorne an.
+* Inputsargument: 
+				komponent* last_RLC : Zeiger auf letztes Element in der Komponentlist.
+* Rückgabewert  : -
+*********************************************************************************************************************************/
 void zusammenfassen::operator()(komponent * last_RLC)
 {
 	Initialize_Adjacenzmatrix(last_RLC);
-	while (seriell() || stern2dreieck() || dreieck2stern())
+	while (seriell()||stern2dreieck() ||dreieck2stern())
 	{
-		;
-	//	print_Adj();
+		print_Adj();
 	}
-	cout << endl << "Keine weitere Aenderung vorgenemmen => fertig !" << endl;
-	//print_Adj();
+	cout << endl << "Keine Aenderung vorgenemmen => fertig !" << endl;
+	print_Adj();
 	H_Nenner = Adjacenzmatrix[node_table[sys_pointer.INPUT] - 1][node_table[sys_pointer.OUTPUT] - 1] + " + " + Adjacenzmatrix[node_table[sys_pointer.OUTPUT] - 1][node_table[sys_pointer.GND] - 1];
 	H_Zaehler = Adjacenzmatrix[node_table[sys_pointer.OUTPUT] - 1][node_table[sys_pointer.GND] - 1];
-	cout << "Uebertragungsfunktion" << endl;
 	cout << "Zaehler: " << H_Zaehler << endl;
 	cout << "Nenner: " << H_Nenner << endl;
 }
 void zusammenfassen::print_Adj()
 {
 	cout << "Adjacenzmatrix " << endl;
-	for (int lp = 0; lp < Adjacenzmatrix.size(); lp++)
+	for (int lp = 0 ; lp < Adjacenzmatrix.size();lp++)
 	{
-		cout << rev_node_table[lp + 1] << "  ";
+		cout << rev_node_table[lp+1] << "  ";
 		for (int fp = 0; fp < Adjacenzmatrix[lp].size(); fp++)
-		{
+		{			
 			if (Adjacenzmatrix[lp][fp] != "")
 			{
 				cout << Adjacenzmatrix[lp][fp] << "  ";
@@ -428,8 +430,8 @@ void zusammenfassen::print_Adj()
 		}
 		cout << endl;
 	}
-	cout << "Legende" << endl;
 	for (auto& x : legend) {
-		cout << x.first << ": " << x.second.Zaehler << ": " << x.second.Nenner << endl;
+		cout << x.first << ": " << x.second.Zaehler << ": "<< x.second.Nenner << endl;
 	}
 }
+
