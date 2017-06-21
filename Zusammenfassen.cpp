@@ -395,6 +395,13 @@ void zusammenfassen::insert_s2d(int mid_node, int pina, int pinb, int pinc) {
 	Adjacenzmatrix[pinb][pina] = Adjacenzmatrix[pina][pinb]; // Symmetrie
 
 }
+/********************************************************************************************************************************
+*Funktion: Dieser Operator ruft die Funktionen "seriell->stern2dreieck->dreieck2stern" der Reihefolge nach auf. Wenn Änderungen in
+*		   der Schaltung vorgenommen werden, fängt die Zusammenfassungsoperation wieder von vorne an.
+* Inputsargument: 
+				komponent* last_RLC : Zeiger auf letztes Element in der Komponentlist.
+* Rückgabewert  : -
+*********************************************************************************************************************************/
 void zusammenfassen::operator()(komponent * last_RLC)
 {
 	Initialize_Adjacenzmatrix(last_RLC);
