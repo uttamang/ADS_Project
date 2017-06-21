@@ -17,6 +17,7 @@ unsigned char k_index = 0;
 bool mouse_weiter_flag = false;
 
 void print_kanten_tabelle(komponent* last_RLC);
+int breite_berechnung(char* tx, int schrift);
 komponent* scanner(void);
 
 #ifndef _USE_OLD_OSTREAMS
@@ -72,7 +73,7 @@ void user_main()
 	zusammenfassen Netz1;
 	Netz1(last_RLC);
 
-	int ww = 1400, hh = 900;
+	int ww = 1200, hh = 600;
 	int schrift = 24;
 	char* tx = "1234567890";
 	
@@ -91,7 +92,7 @@ void user_main()
 		text(780, 200, 24, BLUE, ".");
 		text(750, 224, 24, BLUE, "AA");
 		text(774, 224, 24, BLUE, "A");*/
-		Brueck_Darstellung( Netz1.H_Nenner, Netz1.H_Zaehler, 1000, 800, schrift);
+		Brueck_Darstellung( Netz1.H_Nenner, Netz1.H_Zaehler, 950,180, schrift);
 							// Den "Restart"-Button malen und auf eine Aktivierung warten.
 		weiter();
 		if (StopProcess())break;
@@ -99,30 +100,56 @@ void user_main()
 	}
 }
 
-int Brueck_Darstellung(string Nenner, string Zaehler, int ww, int hh, int schrift)
+int Brueck_Darstellung(string Nenner, string Zaehler, int mitte_x, int mitte_y, int schrift)
 {
 	int tx_y, tx_x;
-	int temp;
+	int line_x,line_x2,line_y;
 	char* tx = new char[Zaehler.length() + 1];
 	char* tx_n = new char[Nenner.length() + 1];
+	int tx_x2;
+	
 	strcpy(tx, Zaehler.c_str());
 	strcpy(tx_n, Nenner.c_str());
 
-	tx_x = ww / 2 - Nenner.length()*schrift*0.9 /2;
-	tx_y = hh / 2 + schrift;
+	tx_x2 = breite_berechnung(tx_n,schrift);
+	tx_x = mitte_x - tx_x2;
+	tx_y = mitte_y + schrift;
 	text(tx_x, tx_y, schrift, BLUE, tx_n);
-	temp = tx_x;
+	
+	line_x = tx_x;
+	line_x2 = tx_x2;
+	line_y = tx_y;
 
-	line(tx_x, tx_y, tx_x + schrift*0.9 * Nenner.length()/2, tx_y, RED);
-
-	tx_x = ww / 2 - Zaehler.length()*schrift/2;
-	tx_y = hh / 2;
+	tx_x2 = breite_berechnung(tx, schrift);
+	tx_x = mitte_x - tx_x2;
+	tx_y = mitte_y ;
 	text(tx_x, tx_y, schrift, BLUE, tx);
+
+	if (Nenner.length()<Zaehler.length())
+	{
+		line_x = tx_x;
+		line_x2 =  tx_x2;
+	}
+	line(line_x, line_y, line_x+line_x2, line_y, RED);
 
 	delete[] tx;
 	delete[] tx_n;
-	return temp;
+	return line_x;
 
+}
+int breite_berechnung(char* tx, int schrift)
+{
+	char * pch;
+	int breite = 0;;
+	pch = strtok(tx, " ");
+	while (pch != NULL)
+	{
+		breite += schrift*0.4;
+		//printf("%s\n", pch);
+		pch = strtok(NULL, " ");
+		
+	}
+	return breite;
 }
 void Bereich_Darstellung()
 {
@@ -143,6 +170,7 @@ komponent* scanner(void)
 	inf = fopen(fistr, "r");
 	if (inf == NULL) {
 		printf("Cannot open input file %s\n", fistr);
+		exit(0);
 		return NULL;
 	}
 	CParser obj;
@@ -225,7 +253,7 @@ void legend(zusammenfassen& l, int schrift)
 	text_x(15,y,50,BLUE,"LEGENDE");
 	for (auto& x : l.legend) {
 		y += 5*schrift;
-		x_x = Brueck_Darstellung(x.second.Nenner, x.second.Zaehler, 500 + x.first.size()+schrift*0.5, y, schrift);
+		x_x=Brueck_Darstellung(x.second.Nenner, x.second.Zaehler, 300 , y / 2 + 0.5*schrift, schrift);
 		text_x(x_x - x.first.size()*schrift*0.9/2  ,y/2+0.5*schrift,schrift,BLUE,x.first + " = ");
 	}
 }
