@@ -393,11 +393,19 @@ void zusammenfassen::insert_s2d(int mid_node, int pina, int pinb, int pinc) {
 
 }
 /********************************************************************************************************************************
+<<<<<<< HEAD
 *Funktion: Dieser Operator ruft die Funktionen "seriell->stern2dreieck->dreieck2stern" der Reihefolge nach auf. Wenn Änderungen in
 *		   der Schaltung vorgenommen werden, fängt die Zusammenfassungsoperation wieder von vorne an.
 * Inputsargument: 
 				komponent* last_RLC : Zeiger auf letztes Element in der Komponentlist.
 * Rückgabewert  : -
+=======
+*Funktion: Dieser Operator ruft die Funktionen "seriell->stern2dreieck->dreieck2stern" der Reihefolge nach auf. Wenn Ã„nderungen in
+*		   der Schaltung vorgenommen werden, fÃ¤ngt die Zusammenfassungsoperation wieder von vorne an.
+* Inputsargument: 
+				komponent* last_RLC : Zeiger auf letztes Element in der Komponentlist.
+* RÃ¼ckgabewert  : -
+>>>>>>> origin/master
 *********************************************************************************************************************************/
 void zusammenfassen::operator()(komponent * last_RLC)
 {
