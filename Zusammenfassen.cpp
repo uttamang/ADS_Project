@@ -40,7 +40,7 @@ void zusammenfassen::Initialize_Adjacenzmatrix(komponent * last_RLC)
 		}
 		if (Adjacenzmatrix[node_table[rt->NODE_1] - 1][node_table[rt->NODE_2] - 1] != "")// ueberprueft, ob zwischen den beiden Knoten schon Elementname eingetragen wurde.
 		{
-			Adjacenzmatrix[node_table[rt->NODE_1] - 1][node_table[rt->NODE_2] - 1] += "||" + rt->Element;
+			Adjacenzmatrix[node_table[rt->NODE_1] - 1][node_table[rt->NODE_2] - 1] = "(" + Adjacenzmatrix[node_table[rt->NODE_1] - 1][node_table[rt->NODE_2] - 1] + "||" + rt->Element + ")";
 		}
 		else
 			Adjacenzmatrix[node_table[rt->NODE_1] - 1][node_table[rt->NODE_2] - 1] = rt->Element;
@@ -48,7 +48,7 @@ void zusammenfassen::Initialize_Adjacenzmatrix(komponent * last_RLC)
 		if (Adjacenzmatrix[node_table[rt->NODE_2] - 1][node_table[rt->NODE_1] - 1] != "")// Adjacenzmatrix ist symmetrisch, deswegen wird dasselbe Element nochmals in die transponierte Position eingetragen.
 		{
 			ele0 = Adjacenzmatrix[node_table[rt->NODE_2] - 1][node_table[rt->NODE_1] - 1];
-			Adjacenzmatrix[node_table[rt->NODE_2] - 1][node_table[rt->NODE_1] - 1] += "||" + rt->Element;
+			Adjacenzmatrix[node_table[rt->NODE_2] - 1][node_table[rt->NODE_1] - 1] ="(" + Adjacenzmatrix[node_table[rt->NODE_2] - 1][node_table[rt->NODE_1] - 1]  + "||" + rt->Element + ")";
 			cout << "------------------------------------------------------------------------------------------------------" << endl; 
 			cout << "Parallele Zusammenfassung " << endl;
 			cout << " - An den Knoten (" + rt->NODE_1 + "," + rt->NODE_2 + ") ist das Element " << ele0 << " schon vorhanden" << endl;
@@ -390,7 +390,7 @@ void zusammenfassen::insert_s2d(int mid_node, int pina, int pinb, int pinc) {
 	}
 	else
 	{
-		Adjacenzmatrix[pina][pinb] = "R{" + rev_node_table[pina + 1] + ',' + rev_node_table[pinb + 1] + '}' + "||" + Adjacenzmatrix[pina][pinb];  //Abkuerzung in der Adjacenzmatrix gespeichert und parallel mit dem vorhandenen Element geschaltet
+		Adjacenzmatrix[pina][pinb] = "(R{" + rev_node_table[pina + 1] + ',' + rev_node_table[pinb + 1] + '}' + "||" + Adjacenzmatrix[pina][pinb] + ")";  //Abkuerzung in der Adjacenzmatrix gespeichert und parallel mit dem vorhandenen Element geschaltet
 		cout << " - An den Knoten (" + rev_node_table[pina + 1] + ',' + rev_node_table[pinb + 1] + ") ist das Element " << ele0 << " schon vorhanden" <<endl;
 		cout << "   => Parallele Zusammenfassung " << endl;
 		cout << "      Ergebbnis an den Knoten (" + rev_node_table[pina + 1] + ',' + rev_node_table[pinb + 1] + ") : " << Adjacenzmatrix[pina][pinb] << endl;
@@ -422,10 +422,7 @@ void zusammenfassen::operator()(komponent * last_RLC)
 	cout << "Zaehler: " << H_Zaehler << endl;
 	cout << "Nenner: " << H_Nenner << endl << endl;
 	cout << "------------------------------------------------------------------------------------------------------" << endl;
-	cout << "Legende" << endl;
-	for (auto& x : legend) {
-		cout << x.first << ": " << x.second.Zaehler << ": " << x.second.Nenner << endl;
-	}
+	print_legend();
 }
 /*********************************************************************************************************************************
 * Funktion: Die Adjacenzmatrix wird ausgegeben
@@ -450,5 +447,38 @@ void zusammenfassen::print_Adj()
 				cout << "--  ";
 		}
 		cout << endl;
+	}
+}
+
+/*********************************************************************************************************************************
+* Funktion: Legende wird ausgegeben
+*
+* Rueckgabewert: keine.
+* nach dem Aufruf des Funktion wird kein Variabel ueberschriben
+********************************************************************************************************************************/
+void zusammenfassen::print_legend()
+{
+	int kk = 0;
+	cout << "Legende" << endl;
+	for (auto& x : legend)
+	{
+		cout << "          " << x.second.Zaehler << endl;
+		kk = x.second.Nenner.size();
+		if (x.second.Nenner.size() < x.second.Zaehler.size())
+		{
+			kk = x.second.Zaehler.size();
+		}
+		cout << x.first << " =  ";
+		for (int nn = 0; nn < kk; nn++)
+		{
+			cout << "-";
+		}
+		cout << endl;
+		cout << "          ";
+		for (int nn = 0; nn < kk / 2 - x.second.Nenner.size() / 2; nn++)
+		{
+			cout << " ";
+		}
+		cout << x.second.Nenner << endl << endl;
 	}
 }

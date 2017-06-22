@@ -41,6 +41,7 @@ public:
 	bool stern2dreieck();
 	void operator ()(komponent* last_RLC);
 	void print_matrix();
+	void print_legend();
 	void insert_s2d(int node, int pina, int pinb, int pinc);
 	void print_Adj();
 };
