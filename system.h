@@ -7,7 +7,9 @@
 #include <string>
 
 using namespace std;
-
+/******************************************************************************************************
+*	Klasse system_1: Die Knotenn ,die sich um Eingang, Ausgang und Masse verhalten, werden gepeichert.
+******************************************************************************************************/
 class system_1
 {
 public:

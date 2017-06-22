@@ -1,4 +1,4 @@
-#pragma once
+ï»¿#pragma once
 
 #include <vector>
 #include <string>
@@ -12,7 +12,6 @@ typedef vector<vector<string> >  Ad_Mat;
 /**************************************************************************************************
 *	Klasse Darstellung: Hilfklasse zur Darstellung des Legends in GDE
 ***************************************************************************************************/
-
 class Darstellung
 {
 public:
@@ -33,8 +32,8 @@ public:
 	int max_read_node = 0;// maximale eingelesene Knoten
 	int stern_index = 0; // Anzahl der Dreieck-Stern Transformation
 	string H_Nenner; // Hauptnenner
-	string H_Zaehler;// Hauptzähler
-
+	string H_Zaehler;// Hauptzaehler
+	string H_R_in;
 	void Initialize_Adjacenzmatrix(komponent* last_RLC);
 	bool seriell();
 	bool load_node_table(string node, int index);

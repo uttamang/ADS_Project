@@ -1,4 +1,4 @@
-// K7scan0.cpp 
+ï»¿// K7scan0.cpp 
 //
 #include "stdafx.h"
 #include "Scanner.hpp"
@@ -11,8 +11,8 @@ void CParser::Load_tokenentry(string str, int index)
 }
 void CParser::IP_init_token_table()
 {
-	Load_tokenentry("IDENTIFIER",4);
-	Load_tokenentry("INTEGER1",5);
+	Load_tokenentry("IDENTIFIER", 4);
+	Load_tokenentry("INTEGER1", 5);
 
 	int ii = TOKENSTART;
 	Load_tokenentry("(", ii++);
@@ -22,8 +22,8 @@ void CParser::IP_init_token_table()
 	Load_tokenentry(",", ii++);
 	Load_tokenentry("NETS", ii++);
 	Load_tokenentry("INTERNAL", ii++);
-	Load_tokenentry("CMN",ii++);
-	Load_tokenentry("OUT",ii++);
+	Load_tokenentry("CMN", ii++);
+	Load_tokenentry("OUT", ii++);
 	Load_tokenentry("IN", ii++);
 	Load_tokenentry("R", ii++);
 	Load_tokenentry("C", ii++);
@@ -47,28 +47,28 @@ void CParser::pr_tokentable()
 }
 //------------------------------------------------------------------------
 /*********************************************************************************************************
-* Funktion: Die Funktion führt die lexikalische Analyse durch und charakterisiert das Ergebnis nach der 
-*			Analyse. Laut dem Input der Form "(Elementname):(Elementtype)(Knoten1,Knoten2)" ist der Zähler
+* Funktion: Die Funktion fï¿½hrt die lexikalische Analyse durch und charakterisiert das Ergebnis nach der
+*			Analyse. Laut dem Input der Form "(Elementname):(Elementtype)(Knoten1,Knoten2)" ist der Zï¿½hler
 *			des Index
 *			0 : Elementname
 *			1 : Knoten1
 *			2 : Knoten2
 *			Die Elementtypen werden in Token-Tabelle eingetragen, sodass sie nicht mehr IDENTIFIER sind.
 *			Die obigen Informationen sind in der Komponentlist der Klasse "komponent" gespeichert. Am Ende
-*			der Funktion wird der Zeiger auf das letzte Element zurückgegeben.
-*		
-*			Am Anfang der Input-Datei sind die Information der INPUT, OUTPUT, GND Knoten. Diese werden in 
+*			der Funktion wird der Zeiger auf das letzte Element zurï¿½ckgegeben.
+*
+*			Am Anfang der Input-Datei sind die Information der INPUT, OUTPUT, GND Knoten. Diese werden in
 *			"netz_id" gespeichert. Sie sind in der Datei so beschrieben "NETS:a:IN;b:OUT;c:CMN;d,e:INTERNAL;"
-*			Aus diesem Grund wird am Anfang des Funktionsstart diese Information entnommen. Die zugehörigen 
-*			Zähler-Index sind
+*			Aus diesem Grund wird am Anfang des Funktionsstart diese Information entnommen. Die zugehï¿½rigen
+*			Zï¿½hler-Index sind
 *			0: Input-Knote
 *			1: Output-Knote
 *			2: GND-Knote
 *
-*	Argument: 
+*	Argument:
 *			system_1& netz_id: Variable zum Speichern der Input-, Output-, GND-Knoten.
 *
-*	Rückgabewert:
+*	Rï¿½ckgabewert:
 *			komponent* : Zeiger auf das letzte Element der Komponentlist.
 */
 komponent*	CParser::yyparse_and_init_Netz(system_1& netz_id)
@@ -82,14 +82,14 @@ komponent*	CParser::yyparse_and_init_Netz(system_1& netz_id)
 	*/
 	while ((tok = yylex()) != 0) {
 		printf("%d ", tok);
-		if (tok == INTEGER1) 
+		if (tok == INTEGER1)
 			printf("%s %d ", IP_revToken_table[tok].c_str(), yylval.i);
 		else
 			if (tok == IDENTIFIER && IP_LineNumber == 1)   // init datalist
 			{
 				printf("%s %s ", IP_revToken_table[tok].c_str(), yylval.s.c_str());
 
-				/*Die Beschreibung wird hier überprüft.*/
+				/*Die Beschreibung wird hier ï¿½berprï¿½ft.*/
 				if (k_index <= 2)
 				{
 					if (k_index <= 1)
@@ -101,7 +101,7 @@ komponent*	CParser::yyparse_and_init_Netz(system_1& netz_id)
 				}
 				k_index++;
 			}
-			else if(tok == IDENTIFIER && IP_LineNumber != 1 )
+			else if (tok == IDENTIFIER && IP_LineNumber != 1)
 			{
 				printf("%s %s ", IP_revToken_table[tok].c_str(), yylval.s.c_str());
 				if (ID_Count == 0)
