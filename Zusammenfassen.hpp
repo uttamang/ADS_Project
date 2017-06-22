@@ -34,6 +34,7 @@ public:
 	string H_Nenner; // Hauptnenner
 	string H_Zaehler;// Hauptzaehler
 	string H_R_in;
+	~zusammenfassen();
 	void Initialize_Adjacenzmatrix(komponent* last_RLC);
 	bool seriell();
 	bool load_node_table(string node, int index);
@@ -44,4 +45,5 @@ public:
 	void print_legend();
 	void insert_s2d(int node, int pina, int pinb, int pinc);
 	void print_Adj();
+	void clear_all(komponent* last_RLC);
 };

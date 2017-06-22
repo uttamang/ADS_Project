@@ -40,7 +40,7 @@ void print_kanten_tabelle(komponent* last_RLC);
 void Bereich_Darstellung();
 void Schaltung_Darstellung(int x0, int y0,zusammenfassen Netz);
 void Restart();
-void weiter();
+bool weiter();
 void text_x(int x, int y, int size, int color, string tx);
 
 /************************************************************************************************************
@@ -48,29 +48,35 @@ void text_x(int x, int y, int size, int color, string tx);
 ************************************************************************************************************/
 void user_main()
 {
-	komponent* last_RLC;
-	last_RLC = scanner();
-	print_kanten_tabelle(last_RLC);
-	zusammenfassen Netz1;
-	Netz1(last_RLC);	
-	int schrift = ww/50;	
-	set_windowpos( 20, 40, ww, hh);
-	while (1) {								// Endlosschleife
-		set_drawarea(ww, hh);				// Setzen des Zeichenbereiches
-		clrscr();
-		Bereich_Darstellung();
-		int y_U = hh / 6 ;
-		int x_U = Brueck_Darstellung( Netz1.H_Nenner, Netz1.H_Zaehler, ww/6, y_U, schrift);
-		x_U -= 3 * 0.4*schrift;
-		text_x(x_U, y_U - 0.5*schrift, schrift, BLUE, " = ");
-		x_U -= 7 * 0.4*schrift;
-		Brueck_Darstellung("U("+sys_pointer.INPUT+","+ sys_pointer.GND+")","U(" + sys_pointer.OUTPUT + "," + sys_pointer.GND + ")",x_U, y_U, schrift);
-		Schaltung_Darstellung(x_U, hh / 2 + 50, Netz1);
-		print_inputfile();
-		// Den "Restart"-Button malen und auf eine Aktivierung warten.
-		weiter();
-		if (StopProcess())break;
-
+	while (1)
+	{
+		komponent* last_RLC;
+		last_RLC = scanner();
+		print_kanten_tabelle(last_RLC);
+		zusammenfassen Netz1;
+		Netz1(last_RLC);
+		int schrift = ww / 50;
+		set_windowpos(20, 40, ww, hh);
+		while (1) {								// Endlosschleife
+			set_drawarea(ww, hh);				// Setzen des Zeichenbereiches
+			clrscr();
+			Bereich_Darstellung();
+			int y_U = hh / 6;
+			int x_U = Brueck_Darstellung(Netz1.H_Nenner, Netz1.H_Zaehler, ww / 6, y_U, schrift);
+			x_U -= 3 * 0.4*schrift;
+			text_x(x_U, y_U - 0.5*schrift, schrift, BLUE, " = ");
+			x_U -= 7 * 0.4*schrift;
+			Brueck_Darstellung("U(" + sys_pointer.INPUT + "," + sys_pointer.GND + ")", "U(" + sys_pointer.OUTPUT + "," + sys_pointer.GND + ")", x_U, y_U, schrift);
+			Schaltung_Darstellung(x_U, hh / 2 + 50, Netz1);
+			print_inputfile();
+			// Den "Restart"-Button malen und auf eine Aktivierung warten.
+			if (weiter())
+			{
+				Netz1.clear_all(last_RLC);
+				break;
+			}
+			if (StopProcess())break;
+		}
 	}
 }
 
@@ -313,7 +319,7 @@ void Restart()
 	clrscr();
 	printf("######################################\n\n");
 }
-void weiter()
+bool weiter()
 {
 	int b, h, x, y;
 
@@ -329,8 +335,8 @@ void weiter()
 			)) 
 	{
 		printf(".");
-		mouse_weiter_flag = true;
 		if (StopProcess())break;
+		return true;
 	};
 
 }

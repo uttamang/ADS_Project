@@ -144,7 +144,7 @@ bool zusammenfassen::dreieck2stern()
 		Adjacenzmatrix.push_back(init);
 		load_node_table("st" + to_string(k_index), k_index + 1);// Hier muss noch Index fuer st rein
 
-																//-----------------------------------------------------//
+		//-----------------------------------------------------//
 		Darstellung B;
 		char i2 = 1, i3 = 2;
 
@@ -168,6 +168,17 @@ bool zusammenfassen::dreieck2stern()
 			Adjacenzmatrix[stern_position[i]][stern_position[0]] = "";
 			Adjacenzmatrix[stern_position[i]][stern_position[1]] = "";
 			Adjacenzmatrix[stern_position[i]][stern_position[2]] = "";
+		}
+		cout << endl;
+		cout << "----------------------------------------------------------------------------------" << endl;
+		cout << "     Dreieck-Stern Transformation an den Knoten:" << endl;
+		cout << "     " + rev_node_table[stern_position[0] + 1] + ',' + rev_node_table[stern_position[1] + 1] + ',' + rev_node_table[stern_position[2] + 1] << endl;
+		cout << "Ergebnis:" << endl;
+		for (int i = 0; i < 3; i++)
+		{
+			cout << "Knoten: " << rev_node_table[stern_position[i] + 1] + ',' << rev_node_table[k_index + 1] << ": ";
+			cout << Adjacenzmatrix[stern_position[i]][k_index] + "=";
+			cout << legend[Adjacenzmatrix[stern_position[i] ][k_index ]].Zaehler + '/' << legend[Adjacenzmatrix[stern_position[i]][k_index]].Nenner << endl;
 		}
 	}
 
@@ -448,6 +459,32 @@ void zusammenfassen::print_Adj()
 		}
 		cout << endl;
 	}
+}
+
+void zusammenfassen::clear_all(komponent * last_RLC)
+{
+	komponent* rt = last_RLC;
+	komponent* fi;
+	while (rt != NULL)
+	{
+		fi = rt->next;
+		delete rt;
+		rt = fi;
+	}
+}
+
+zusammenfassen::~zusammenfassen()
+{
+	node_table.erase(node_table.begin(), node_table.end());
+	rev_node_table.erase(rev_node_table.begin(), rev_node_table.end());
+	legend.erase(legend.begin(), legend.end());
+	for(int i = 0 ; i < k_index ; i++)
+		Adjacenzmatrix[i].erase(Adjacenzmatrix[i].begin(), Adjacenzmatrix[i].end());
+	Adjacenzmatrix.erase(Adjacenzmatrix.begin(), Adjacenzmatrix.end());
+	H_Nenner.clear();
+	H_Zaehler.clear();
+	H_R_in.clear();
+	cout << "delete complete" << endl;
 }
 
 /*********************************************************************************************************************************
