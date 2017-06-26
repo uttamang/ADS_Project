@@ -31,6 +31,7 @@ public:
 	map<string, Darstellung> legend; // Legendetabelle
 	int max_read_node = 0;// maximale eingelesene Knoten
 	int stern_index = 0; // Anzahl der Dreieck-Stern Transformation
+	int dreieck_index = 0;
 	string H_Nenner; // Hauptnenner
 	string H_Zaehler;// Hauptzaehler
 	string H_R_in;

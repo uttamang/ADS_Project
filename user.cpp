@@ -1,4 +1,4 @@
-// User.cpp : header file
+ï»¿// User.cpp : header file
 //
 /////////////////////////////////////////////////////////////////////////////
 
@@ -38,7 +38,7 @@ int breite_berechnung(string tx, int schrift);
 void print_inputfile();
 void print_kanten_tabelle(komponent* last_RLC);
 void Bereich_Darstellung();
-void Schaltung_Darstellung(int x0, int y0,zusammenfassen Netz);
+void Schaltung_Darstellung(int x0, int y0, zusammenfassen Netz);
 void Restart();
 bool weiter();
 void text_x(int x, int y, int size, int color, string tx);
@@ -106,7 +106,7 @@ komponent* scanner(void)
 /************************************************************************************************************
 * Funktion : Die Funktion stellt in der graphischen Oberflaeche eine Bruecke dar.
 *
-* Argument 
+* Argument
 * - string Nenner
 * - string Zaehler
 * - int x0 : Anfang Potion in horizontaler Koordinaten
@@ -118,15 +118,15 @@ komponent* scanner(void)
 int Brueck_Darstellung(string Nenner, string Zaehler, int x0, int y0, int schrift)
 {
 	int tx_y, x_mitte;
-	int line_x,ww_line,line_y;
+	int line_x, ww_line, line_y;
 	char* tx = new char[Zaehler.length() + 1];
 	char* tx_n = new char[Nenner.length() + 1];
-	int ww_nenner,ww_zaehler;
-	
+	int ww_nenner, ww_zaehler;
+
 	strcpy(tx, Zaehler.c_str());
 	strcpy(tx_n, Nenner.c_str());
 
-	ww_nenner = breite_berechnung(Nenner,schrift); //Berite des Nenners wird berechnet
+	ww_nenner = breite_berechnung(Nenner, schrift); //Berite des Nenners wird berechnet
 	ww_zaehler = breite_berechnung(Zaehler, schrift); // //Berite des Nenners wird berechnet
 
 	if (ww_nenner < ww_zaehler) // Die laengere Breite wird genommen
@@ -137,15 +137,15 @@ int Brueck_Darstellung(string Nenner, string Zaehler, int x0, int y0, int schrif
 	{
 		ww_line = ww_nenner;
 	}
-	line(x0, y0+1, x0 + ww_line, y0+1, RED); // Linie wird dargestellt
+	line(x0, y0 + 1, x0 + ww_line, y0 + 1, RED); // Linie wird dargestellt
 
-	x_mitte = x0 + ww_line/2;
-	text(x_mitte - ww_nenner/2, y0, schrift, BLUE, tx_n);
-	
-	
-	
-	text(x_mitte - ww_zaehler/2, y0-schrift, schrift, BLUE, tx);
-	
+	x_mitte = x0 + ww_line / 2;
+	text(x_mitte - ww_nenner / 2, y0, schrift, BLUE, tx_n);
+
+
+
+	text(x_mitte - ww_zaehler / 2, y0 - schrift, schrift, BLUE, tx);
+
 
 	delete[] tx;
 	delete[] tx_n;
@@ -183,9 +183,9 @@ int breite_berechnung(string tx, int schrift)
 		pch = strtok(NULL, " ,.-+*()[]|{}");
 	}
 	N_Zeichen = tx.length() - N_Buchstabe; // Die Anzahl der Zeichen wird berechnet
-	//cout << "Anzahl der Buchstaben :" << N_Buchstabe << "Zeichen" << N_Zeichen;
+										   //cout << "Anzahl der Buchstaben :" << N_Buchstabe << "Zeichen" << N_Zeichen;
 	breite = N_Buchstabe*schrift*0.51 + N_Zeichen*schrift*0.225; //gewisse Breite wird zu den Buchstaben und Zeichen zugeordnet.
-	//cout << " Breite :" << breite << endl;
+																 //cout << " Breite :" << breite << endl;
 	return breite;
 }
 /************************************************************************************************************
@@ -253,16 +253,16 @@ void print_kanten_tabelle(komponent* last_RLC)
 ************************************************************************************************************/
 void Bereich_Darstellung()
 {
-	text_x(20, 15, 32, BLUE, "Übertragungsfunktion");
+	text_x(20, 15, 32, BLUE, "ï¿½bertragungsfunktion");
 	rectangle(10, 10, ww - 10, hh / 3, BLUE, -1);
-	text_x(20, hh / 3 - 25, 18, BLUE, "Legende der Wiederstände in Console-Fenster");
+	text_x(20, hh / 3 - 25, 18, BLUE, "Legende der Wiederstï¿½nde in Console-Fenster");
 	text_x(20, hh / 3 + 15, 32, BLUE, "zusammengefasste Schaltung");
 	rectangle(10, hh / 3 + 10, ww - 10, hh - 10, BLUE, -1);
 }
 
 /************************************************************************************************************
 * Funktion : Die Endresultat der zusammengefassten Schaltung wird dargestellt.
-*		Die zwei Widerstaende wird geschrieben. Die Eingangs- und Ausgangsknoten 
+*		Die zwei Widerstaende wird geschrieben. Die Eingangs- und Ausgangsknoten
 *		werden gezeichnet.
 *
 * Argumente :
@@ -332,7 +332,7 @@ bool weiter()
 		!((mouseclick(&x, &y) == 1) &&
 		((x > b - 120) && (x < b - 5)) &&
 			((y > h - 40) && (y < h - 5))
-			)) 
+			))
 	{
 		printf(".");
 		if (StopProcess())break;
@@ -345,13 +345,12 @@ bool weiter()
 * Funktion : Die Funktion stellt eine Textdarstellung dar. Mit der Funktion laesst sich es vermeiden,
 * jedes mal string zu kopieren, die Anzahl der Zeichen zu berechnen.
 *
-* Argumente : 
+* Argumente :
 * Rueckgabewert : keine
 ************************************************************************************************************/
-void text_x(int x, int y , int size, int color , string tx)
+void text_x(int x, int y, int size, int color, string tx)
 {
 	char* tx_n = new char[tx.length() + 1];
 	strcpy(tx_n, tx.c_str());
-	text(x,y,size,color,tx_n);
+	text(x, y, size, color, tx_n);
 }
-
